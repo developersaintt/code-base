@@ -1,0 +1,86 @@
+<script type="application/json" class = "selector--custom">
+	{{product | json}}
+</script>
+
+<script >
+  
+  //last working checkpoint 11:02 PM
+  //last working checkpoint 11:58 PM
+  
+  function changeMainSelector(){
+    let selected_material = material_selector.selectedOptions[0].innerText;
+    let selected_color = document.querySelector('.active-swatch').dataset.variantColor;
+    
+    main_selector.selectedIndex = all_variants.indexOf([selected_material, selected_color].join(' / '));
+  }
+  
+  
+  let chair = JSON.parse(document.querySelector('.selector--custom').innerHTML);
+  let material_selector = document.querySelector('.Material-selector--custom');
+  let main_selector = document.querySelector('.main_selector');
+  let all_variants = [];
+  
+  let dict = {};
+  for (let chair_var of chair.variants){
+    all_variants.push(chair_var.title);
+    let chair_variant = chair_var.title.split(' / ');
+    if (dict[chair_variant[0]]){
+      dict[chair_variant[0]] = [dict[chair_variant[0]],chair_variant[1]];
+    }
+    else{
+      dict[chair_variant[0]] = chair_variant[1];
+    }
+  }
+  
+  function fillMaterialSelector(){
+    let material_selector = document.querySelector('.Material-selector--custom');
+    for (const [key, value] of Object.entries(dict)) {
+      var option = document.createElement("option");
+      option.text = key;
+      material_selector.add(option);
+    }
+    material_selector.selectedIndex = 0;
+  }
+  
+  
+  
+  function showColorSwatches(){
+    
+    let image_swatches = document.querySelector('.image-swatches');
+    image_swatches.innerHTML = '';
+    
+    let selected_material = material_selector.selectedOptions[0].innerHTML;
+    for (let vari of chair.variants){
+      if (vari.option1 == selected_material){
+        let variant_image = document.createElement("img");
+        variant_image.src = vari.featured_image.src;
+        variant_image.dataset.variantId = vari.id;
+        variant_image.dataset.variantColor = vari.option2;
+        image_swatches.appendChild(variant_image);
+      }
+    }
+    
+    document.querySelectorAll('.image-swatches img')[0].classList.add('active-swatch');
+    
+    
+    // this code is placed here because at swatch change this need to be reinitiated
+    swatch_images = document.querySelectorAll('.image-swatches img');
+  
+    swatch_images.forEach(variant_image => variant_image.addEventListener('click', function(){
+      swatch_images.forEach(vi => vi.classList.remove('active-swatch'));
+      variant_image.classList.add('active-swatch');
+      changeMainSelector();
+    }));
+    
+    changeMainSelector();
+  }
+  
+  fillMaterialSelector();
+  showColorSwatches();
+  changeMainSelector();
+
+  material_selector.addEventListener('change', changeMainSelector);
+  material_selector.addEventListener('change', showColorSwatches);
+  
+  
+</script>
