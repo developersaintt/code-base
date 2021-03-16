@@ -2,7 +2,9 @@
 	{{product | json}}
 </script>
 
-<script >
+
+<script>
+ 
   
   //last working checkpoint 11:02 PM
   //last working checkpoint 11:58 PM
@@ -11,13 +13,17 @@
     let selected_material = material_selector.selectedOptions[0].innerText;
     let selected_color = document.querySelector('.active-swatch').dataset.variantColor;
     
+//     ms.selectedOptions[0].innerText.split(' - ')[0]
+    
     main_selector.selectedIndex = all_variants.indexOf([selected_material, selected_color].join(' / '));
+    main_selector.selectedOptions.selected = "selected";
   }
-  
   
   let chair = JSON.parse(document.querySelector('.selector--custom').innerHTML);
   let material_selector = document.querySelector('.Material-selector--custom');
-  let main_selector = document.querySelector('.main_selector');
+//   let main_selector = document.querySelector('.main_selector');
+  let main_selector = document.querySelector('#ProductSelect-product-template-special')
+  
   let all_variants = [];
   
   let dict = {};
@@ -43,8 +49,10 @@
   }
   
   
-  
+
+    
   function showColorSwatches(){
+    
     
     let image_swatches = document.querySelector('.image-swatches');
     image_swatches.innerHTML = '';
@@ -52,11 +60,17 @@
     let selected_material = material_selector.selectedOptions[0].innerHTML;
     for (let vari of chair.variants){
       if (vari.option1 == selected_material){
+        let swatch_image_wrapper = document.createElement('div');
+        swatch_image_wrapper.classList.add('swatch-image-wrapper');
+        swatch_image_wrapper.style.position = "relative";
+        
         let variant_image = document.createElement("img");
         variant_image.src = vari.featured_image.src;
         variant_image.dataset.variantId = vari.id;
         variant_image.dataset.variantColor = vari.option2;
-        image_swatches.appendChild(variant_image);
+        
+        swatch_image_wrapper.appendChild(variant_image)
+        image_swatches.appendChild(swatch_image_wrapper);
       }
     }
     
@@ -73,6 +87,7 @@
     }));
     
     changeMainSelector();
+    showColorOnHover();
   }
   
   fillMaterialSelector();
@@ -83,4 +98,139 @@
   material_selector.addEventListener('change', showColorSwatches);
   
   
+  function showColorOnHover(){
+    document.querySelectorAll('.image-swatches img').forEach(swatch_image => swatch_image.addEventListener('mouseover', function(){
+        let color__hovered = swatch_image.dataset.variantColor;
+        let color__placeholder = document.createElement("div");
+        color__placeholder.classList.add('color-placeholder');
+
+        let color__text = document.createElement('p');
+        color__text.style.color = '#ffffff';
+        color__text.innerHTML = color__hovered;
+        color__placeholder.appendChild(color__text);
+        swatch_image.parentNode.appendChild(color__placeholder);
+        
+      }));
+  
+    
+    document.querySelectorAll('.image-swatches img').forEach(swatch_image => swatch_image.addEventListener('mouseout', function(){
+        document.querySelectorAll('.swatch-image-wrapper .color-placeholder').forEach(color_placeholder => color_placeholder.remove());
+      }));
+  }
+  
+  
+  // hiding the theme selectors
+  window.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelectorAll('.selector-wrapper').forEach(prebuilt_selectors => prebuilt_selectors.style.display = 'none');
+    showColorOnHover();
+  });
+  
+  
 </script>
+
+
+
+
+
+
+<! --- Liquid Form --- />
+
+
+<label>{{product.options[0]}}:</label>
+            <select class='{{product.options[0]}}-selector--custom option-selector--custom'></select>
+          
+          <label>{{product.options[1]}}:</label>
+          <div class="image-swatches">
+          </div>
+          
+          {% form 'product', product, class:productform_class %}
+            <select name="id" id="ProductSelect-{{ section.id }}" class="product-single__variants main_selector">
+              {% for variant in product.variants %}
+                {% if variant.available %}
+
+                  <option value="{{variant.id}}">{{variant.title}}</option>
+                {% else %}
+                  <option disabled="disabled">
+                    {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+                  </option>
+                {% endif %}
+              {% endfor %}
+            </select>
+
+            <div class="product-single__quantity{% unless section.settings.product_quantity_enable %} is-hidden{% endunless %}">
+              <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
+              <input type="number" id="Quantity" name="quantity" value="1" min="1" class="quantity-selector">
+            </div>
+
+            <button type="submit" name="add" id="AddToCart" class="btn {{ btn_class }}{% if section.settings.enable_payment_button and product.selling_plan_groups == empty %} btn--secondary{% endif %}">
+              <span id="AddToCartText">{{ 'products.product.add_to_cart' | t }}</span>
+            </button>
+            {% if section.settings.enable_payment_button %}
+              {{ form | payment_button }}
+            {% endif %}
+          {% endform %}
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+  <! -- CSS PORTION --/>
+	  
+	  
+	  
+  .color-placeholder{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 103%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-dark-grey);
+    width: 150px;
+    height: 30px;
+    animation: increase-width .2s ease-in-out;
+  }
+  
+  @keyframes increase-width {
+  from {width: 0px;}
+  to {width: 150px;}
+	}
+  .color-placeholder:after{
+    content: "";
+    position: absolute;
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid var(--color-dark-grey);
+  }
+  
+  .option-selector--custom{
+    width: 200px;
+  }
+  
+  .image-swatches{
+    display: flex;
+    
+  }
+  
+  .swatch-image-wrapper{
+    position: relative;
+    margin-right: 3rem;
+  }
+  .image-swatches img{
+    max-width: 10rem;
+    border: 2px solid transparent;
+  }
+  
+  
+  .image-swatches img:hover, .active-swatch{
+    border: 2px solid var(--color-dark-grey);
+  }
