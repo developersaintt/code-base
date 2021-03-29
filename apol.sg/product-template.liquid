@@ -15,7 +15,7 @@
   function changeMainSelector(){
     let selected_material = document.querySelector('input[name="Material-selector--custom"]:checked').value;
     let selected_color = document.querySelector('.active-swatch').dataset.variantColor;
-        
+       
     main_selector.selectedIndex = all_variants.indexOf([selected_material, selected_color].join(' / '));
     main_selector.selectedOptions.selected = "selected";
     
