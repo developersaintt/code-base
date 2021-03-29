@@ -1,0 +1,131 @@
+{% comment %}
+  The contents of the product.liquid template can be found in /sections/product-template.liquid
+{% endcomment %}
+
+{% section 'product-template-special' %}
+
+{% section 'product-template-chair' %}
+
+<script type="application/json" class = "selector--custom">
+	{{product | json}}
+</script>
+
+<script>
+ 
+  function changeMainSelector(){
+    let selected_material = document.querySelector('input[name="Material-selector--custom"]:checked').value;
+    let selected_color = document.querySelector('.active-swatch').dataset.variantColor;
+        
+    main_selector.selectedIndex = all_variants.indexOf([selected_material, selected_color].join(' / '));
+    main_selector.selectedOptions.selected = "selected";
+    
+    check_variant_availability();
+  }
+  
+  let chair = JSON.parse(document.querySelector('.selector--custom').innerHTML);
+  let main_selector = document.querySelector('#ProductSelect-product-template-special')
+  
+  let all_variants = [];
+  
+  let dict = {};
+  for (let chair_var of chair.variants){
+    all_variants.push(chair_var.title);
+    let chair_variant = chair_var.title.split(' / ');
+    if (dict[chair_variant[0]]){
+      dict[chair_variant[0]] = [dict[chair_variant[0]],chair_variant[1]];
+    }
+    else{
+      dict[chair_variant[0]] = chair_variant[1];
+    }
+  }
+  
+  
+  function showColorSwatches(){
+    
+    let image_swatches = document.querySelector('.color-swatches');
+    image_swatches.innerHTML = '';
+    
+    let selected_material = document.querySelector('input[name="Material-selector--custom"]:checked').value;
+    
+    for (let vari of chair.variants){
+      if (vari.option1 == selected_material){
+        let swatch_image_wrapper = document.createElement('div');
+        swatch_image_wrapper.classList.add('swatch-image-wrapper');
+        swatch_image_wrapper.style.position = "relative";
+        
+        let variant_image = document.createElement("img");
+        variant_image.src = vari.featured_image.src;
+        variant_image.dataset.variantId = vari.id;
+        variant_image.dataset.variantColor = vari.option2;
+        
+        swatch_image_wrapper.appendChild(variant_image)
+        image_swatches.appendChild(swatch_image_wrapper);
+      }
+    }
+    
+    document.querySelectorAll('.color-swatches img')[0].classList.add('active-swatch');
+    
+    
+    // this code is placed here because at swatch change this need to be reinitiated
+    swatch_images = document.querySelectorAll('.color-swatches img');
+  
+    swatch_images.forEach(variant_image => variant_image.addEventListener('click', function(){
+      swatch_images.forEach(vi => vi.classList.remove('active-swatch'));
+      variant_image.classList.add('active-swatch');
+      changeMainSelector();
+    }));
+    
+    changeMainSelector();
+    showColorOnHover();
+  }
+  
+  showColorSwatches();
+  changeMainSelector();
+
+  
+  document.querySelectorAll('input[name="Material-selector--custom"]').forEach(radio_btn => radio_btn.addEventListener('change', changeMainSelector));
+  document.querySelectorAll('input[name="Material-selector--custom"]').forEach(radio_btn => radio_btn.addEventListener('change', showColorSwatches));
+  
+  function showColorOnHover(){
+    document.querySelectorAll('.color-swatches img').forEach(swatch_image => swatch_image.addEventListener('mouseover', function(){
+        let color__hovered = swatch_image.dataset.variantColor;
+        let color__placeholder = document.createElement("div");
+        color__placeholder.classList.add('color-placeholder');
+
+        let color__text = document.createElement('p');
+        color__text.style.color = '#ffffff';
+        color__text.innerHTML = color__hovered;
+        color__placeholder.appendChild(color__text);
+        swatch_image.parentNode.appendChild(color__placeholder);
+        
+      }));
+  
+    
+    document.querySelectorAll('.color-swatches img').forEach(swatch_image => swatch_image.addEventListener('mouseout', function(){
+        document.querySelectorAll('.swatch-image-wrapper .color-placeholder').forEach(color_placeholder => color_placeholder.remove());
+      }));
+  }
+  
+  
+  // hiding the theme selectors
+  window.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelectorAll('.selector-wrapper').forEach(prebuilt_selectors => prebuilt_selectors.style.display = 'none');
+    showColorOnHover();
+  });
+  
+  
+  function check_variant_availability(){
+    console.log('check avilability called');
+    const selected_variant_id = document.querySelector('#ProductSelect-product-template-special').selectedOptions[0].value;
+    for (let variant of chair.variants){
+      if (selected_variant_id == variant.id && variant.available == false){
+        document.querySelector('.current-indicator span').style.backgroundColor = "#FFC107";
+        document.querySelector('.current-indicator p').style.color = "#FFC107";
+        document.querySelector('.current-indicator p').innerHTML = "Pre-order Now";
+        document.querySelector('button[type="submit"] span').innerText = "PRE ORDER NOW";
+      }
+    }
+  }
+  check_variant_availability();
+  
+</script>
