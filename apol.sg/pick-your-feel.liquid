@@ -1,4 +1,168 @@
+<style>
+/*======================== Pick Your Feel Section Settings=======================*/
 
+.pick-your-feel{
+  height: 100vh;
+  position: relative;
+  display: grid;
+  min-height:700px;
+  grid-template-columns: 29rem 15rem 1fr;
+}
+.side-tabs{
+  grid-column: 1/span 2;
+  position: absolute;
+  left: 0;
+  bottom: 30px;
+  z-index: 10;
+}
+.side-tabs a{
+  margin-bottom: 1rem;
+  margin-left: 1.5rem;
+  justify-content: left;
+}
+.tab-menu{
+  transition: all .2s ease-in-out;
+  position: relative;
+  height: 8rem;
+  width: 35rem;
+  color: white;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  object-fit: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.tab-menu p{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 3rem;
+}
+.tab-menu:hover, .tab-menu--active{
+  width: 36rem;
+  transition: all .3s ease-in-out;
+}
+.tab-menu--active::after{
+  background-color: var(--color-blue-accent-3) !important;
+    }
+
+.tab-menu::after{
+  position: absolute;
+  content: "";
+    background-color: var(--color-light-grey);
+    width: 5px;
+    height: 100%;
+    left: auto;
+    right: 0;
+    }
+.tab-menu:hover:after{
+  background-color: var(--color-blue-accent-3) ;
+    }
+
+.tab-data{
+  grid-column: 2 / span 2;
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.tab-data .tab-content{
+  color: var(--color-white);
+    position: absolute;
+    top: 50%;
+    width: 75%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    }
+.tab-data-element{    
+  height: 100%;
+  object-fit: cover;
+  object-position: left;
+  clip-path: polygon(25px 0%, 100% 0%, 100% 100%, 0% 100%);
+  background-size: cover;
+  background-repeat: no-repeat;
+  transition: all .2s linear;
+  transition-property: opacity, height, margin;
+  display: block;
+  position: relative;
+}
+
+.hidden {
+  opacity: 0;
+  height: 0px;
+  margin: 0 auto;
+}
+
+
+.side-bar--feature-section h2{
+  max-width:150px;
+  text-transform:none;
+}
+
+@media(max-width: 768px){
+  .pick-your-feel{
+    transition: all .3s ease-in-out;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr max-content;
+    height:auto;
+    min-height:0px;
+  }
+  .side-bar--feature-section{
+    grid-row: 2/span 1;
+  }
+  .side-tabs{
+    position: relative;
+    bottom: 0;
+  }
+  .side-tabs > a{
+    display: none;
+  }
+  .tab-menu, .tab-menu:hover, .tab-menu--active{
+    width: 100%;
+    height: 70px;
+  }
+  .tab-data{
+    grid-column: 1;
+    grid-row: 1/span 1;
+    margin-bottom:1rem;
+  }
+
+  .tab-data-element{
+    clip-path: none;
+    transition: all .2s linear;
+    transition-property: opacity, height, margin;
+    display: block;
+    position: relative;
+  }
+  .hidden {
+    opacity: 0;
+    height: 0px;
+    margin: 0 auto;
+  }
+  .side-bar--feature-section > h2{
+    display: none;
+  }
+  .tab-menu--active{
+    max-height: 0;
+    transition: all .3s ease-in-out;
+    margin:0px;
+  }
+  .tab-menu::after {
+    width: 0;
+    height: 0;
+  }
+  .tab-data .tab-content{
+
+    position: relative;
+    top: 0px;
+    width: 100%;
+    left: 0px;
+    transform: none;
+    padding: 15px;
+  }
+}
+
+</style
 <div class="pick-your-feel">
 
     <div class="side-bar--feature-section">
