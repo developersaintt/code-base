@@ -1,0 +1,800 @@
+<div class="product--template-chair_blocks">
+  {% for block in section.blocks %}
+      {% case block.type %}
+          {% when 'gallery-swiper' %}
+              {% include 'product-page-gallery' %}
+      {% endcase %}
+  {% endfor %}
+
+  <div class="product-page-tab-banner">
+      <p class="body" data-banner-tab-name="features">{{section.settings.features_tab_title}}</p>
+      <p class="body" data-banner-tab-name="warranty">{{section.settings.warranty_tab_title}}</p>
+      <p class="body" data-banner-tab-name="specifications">{{section.settings.specifications_tab_title}}</p>
+      <p class="body" data-banner-tab-name="review">{{section.settings.review_tab_title}}</p>
+  </div>
+
+  
+  <div class="banner-tab product-page-features-tab">
+      {% for block in section.blocks %}
+          {% case block.type %}
+
+              {% when 'pick-your-feel' %}
+                  {% assign tab_text_1 = block.settings.tab_text_1 %}
+                  {% assign tab_image_1 = block.settings.tab_image_1 %}
+                  {% assign tab_heading_1 = block.settings.tab_heading_1 %}
+                  {% assign tab_body_1 = block.settings.tab_body_1 %}
+
+                  {% assign tab_text_2 = block.settings.tab_text_2 %}
+                  {% assign tab_image_2 = block.settings.tab_image_2 %}
+                  {% assign tab_heading_2 = block.settings.tab_heading_2 %}
+                  {% assign tab_body_2 = block.settings.tab_body_2 %}
+
+                  {% assign tab_text_3 = block.settings.tab_text_3 %}
+                  {% assign tab_image_3 = block.settings.tab_image_3 %}
+                  {% assign tab_heading_3 = block.settings.tab_heading_3 %}
+                  {% assign tab_body_3 = block.settings.tab_body_3 %}
+
+                  {% assign url_text = block.settings.url_text %}
+                  {% assign url_link = block.settings.url_link %}
+
+                  {% assign feature_heading = block.settings.feature_heading %}
+                  {% include 'pick-your-feel' feature_heading:feature_heading,
+                                              url_text: url_text,
+                                              url_link: url_link%}
+
+              {% when 'image-with-overlay-text' %}
+
+                  {% assign bg = block.settings.background_image%}
+                  {% assign overlay_text_heading = block.settings.overlay_text_heading %}
+                  {% assign overlay_text = block.settings.overlay_text %}
+                  {% assign overlay_text_color = block.settings.text_color %}
+                  {% assign colored_text = block.settings.colored_text %}
+                  {% assign colored_text_color = block.settings.colored_text_color %} 
+                  {% assign text_full_width = block.settings.text_full_width %}
+                  {% assign is_on_left_half = block.settings.is_on_left_half %}
+                  {% assign image = collection_1.image %}
+
+                  {% render 'image-overlay-text', bg : bg, 
+                                                  overlay_text_heading:overlay_text_heading, 
+                                                  overlay_text: overlay_text,
+                                                  overlay_text_color: overlay_text_color,
+                                                  colored_text:colored_text, 
+                                                  colored_text_color:colored_text_color,
+                                                  text_full_width: text_full_width,
+                                                  is_on_left_half: is_on_left_half %}
+
+              {% when 'image-with-text' %}
+
+                  {% assign image_with_text__image = block.settings.image_with_text__image %}
+                  {% assign image_with_text__heading = block.settings.image_with_text__heading %}
+                  {% assign image_with_text__body = block.settings.image_with_text__body %}
+                  {% include 'image-with-text', _image:image_with_text__image, 
+                                              _heading: image_with_text__heading,
+                                              _text:image_with_text__body %}
+
+
+              {% when 'sticky-media-with-text' %}
+                  {% assign sticky_media_with_text__content = block.settings.sticky_media_with_text__content %}
+                  {% assign sticky_media_with_text__image = block.settings.sticky_media_with_text__image %}
+                  {% assign media_on_left = block.settings.media_on_left %}
+                  {% assign sticky_media_with_text__video = block.settings.sticky_media_with_text__video %}
+                  {% assign text_color = block.settings.text_color %}
+     {% assign text_color_mob = block.settings.text_color_mob %}
+                  {% include 'sticky-media-with-text', sticky_media_with_text__content: sticky_media_with_text__content,
+                                                      sticky_media_with_text__image: sticky_media_with_text__image,
+                                                      sticky_media_with_text__video: sticky_media_with_text__video,
+                                                      media_on_left: media_on_left, 
+                                                      text_color:text_color, text_color_mob:text_color_mob %}
+
+          {% endcase %}
+
+
+      {% endfor %}
+  </div>
+
+
+  <div class="banner-tab product-page-warranty-tab">
+      {% for block in section.blocks %}
+          {% case block.type %}
+              {% when 'warranty-tab' %}
+                  {% assign warranty_tab_heading = block.settings.warranty_tab_heading %}
+                  {% assign warranty_tab_image = block.settings.warranty_tab_image %}
+
+                  {% assign warranty_policy_heading_1 = block.settings.warranty_policy_heading_1 %}
+                  {% assign warranty_policy_body_1 = block.settings.warranty_policy_body_1 %}
+                  {% assign warranty_policy_button_text_1 = block.settings.warranty_policy_button_text_1 %}
+                  {% assign warranty_policy_button_link_1 = block.settings.warranty_policy_button_link_1 %}
+
+                  {% assign warranty_policy_heading_2 = block.settings.warranty_policy_heading_2 %}
+                  {% assign warranty_policy_body_2 = block.settings.warranty_policy_body_2 %}
+                  {% assign warranty_policy_button_text_2 = block.settings.warranty_policy_button_text_2 %}
+                  {% assign warranty_policy_button_link_2 = block.settings.warranty_policy_button_link_2 %}
+
+                  {% include 'warranty-tab', warranty_tab_heading: warranty_tab_heading,
+                                             warranty_tab_image:warranty_tab_image,
+
+                                             warranty_policy_heading_1:warranty_policy_heading_1,
+                                             warranty_policy_body_1:warranty_policy_body_1,
+                                             warranty_policy_button_text_1:warranty_policy_button_text_1,
+                                             warranty_policy_button_link_1:warranty_policy_button_link_1,
+
+                                             warranty_policy_heading_2:warranty_policy_heading_2,
+                                             warranty_policy_body_2:warranty_policy_body_2,
+                                             warranty_policy_button_text_2:warranty_policy_button_text_2,
+                                             warranty_policy_button_link_2:warranty_policy_button_link_2,
+                                             %}
+
+          {% endcase %}
+      {% endfor %}
+  </div>
+
+
+  <div class="banner-tab product-page-specifications-tab">
+      {% for block in section.blocks %}
+          {% case block.type %}
+              {% when 'specifications-tab' %}
+                  {% assign size_guide_image = block.settings.size_guide_image %}
+                  {% assign weight_svg = block.settings.weight_svg %}
+                  {% assign height_svg = block.settings.height_svg %}
+
+                  {% assign kraken_min_height = block.settings.kraken_min_height %}
+                  {% assign kraken_max_height = block.settings.kraken_max_height %}
+                  {% assign kraken_weight = block.settings.kraken_weight %}
+
+                  {% assign sphinx_min_height = block.settings.sphinx_min_height %}
+                  {% assign sphinx_max_height = block.settings.sphinx_max_height %}
+                  {% assign sphinx_weight = block.settings.sphinx_weight %}
+
+                  {% assign behemoth_min_height = block.settings.behemoth_min_height %}
+                  {% assign behemoth_max_height = block.settings.behemoth_max_height %}
+                  {% assign behemoth_weight = block.settings.behemoth_weight %}
+
+
+                  {% render 'specifications-tab', size_guide_image:size_guide_image,  
+                                                  weight_svg: weight_svg,
+                                                  height_svg: height_svg,
+                                                  kraken_min_height:kraken_min_height,
+                                                  kraken_max_height:kraken_max_height,
+                                                  kraken_weight:kraken_weight,
+                                                  sphinx_min_height:sphinx_min_height,
+                                                  sphinx_max_height:sphinx_max_height,
+                                                  sphinx_weight:sphinx_weight,
+                                                  behemoth_min_height:behemoth_min_height,
+                                                  behemoth_max_height:behemoth_max_height,
+                                                  behemoth_weight:behemoth_weight %}
+
+                  <div class="divider"></div>
+
+
+              {% when 'faq' %}
+                  {% assign faq_heading = block.settings.faq_heading %}
+                  {% assign faq_button_text = block.settings.faq_button_text %}
+                  {% assign faq_button_link = block.settings.faq_button_link %}
+
+                  {% assign faq_question_1 = block.settings.faq_question_1 %}
+                  {% assign faq_answer_1 = block.settings.faq_answer_1 %}
+                  {% assign faq_question_2 = block.settings.faq_question_2 %}
+                  {% assign faq_answer_2 = block.settings.faq_answer_2 %}
+                  {% assign faq_question_3 = block.settings.faq_question_3 %}
+                  {% assign faq_answer_3 = block.settings.faq_answer_3 %}
+
+                  {% render 'faq',faq_heading:faq_heading,
+                                  faq_button_text:faq_button_text,
+                                  faq_button_link:faq_button_link,
+                                  faq_question_1:faq_question_1,
+                                  faq_answer_1:faq_answer_1,
+                                  faq_question_2:faq_question_2,
+                                  faq_answer_2:faq_answer_2,
+                                  faq_question_3:faq_question_3,
+                                  faq_answer_3:faq_answer_3 %}
+
+                  <div class="divider"></div>
+
+
+              {% when 'what-in-the-box' %}
+                  {% assign item_image = block.settings.item_image %}
+                  {% assign heading = block.settings.heading %}
+                  {% assign item_list = block.settings.item_list %}
+                  {% render 'what-in-the-box',item_image:item_image,
+                                              heading: heading,
+                                              item_list: item_list %}
+
+                  <div class="divider"></div>
+
+              {% when 'youtube-video' %}
+                  {% assign youtube_video_title = block.settings.youtube_video_title %}
+                  {% assign video_url = block.settings.video_url.id %}
+                  {% render 'youtube-video',  youtube_video_title: youtube_video_title,
+                                              video_url: video_url %}
+
+
+          {% endcase %}
+      {% endfor %}
+  </div>
+  
+  
+  <div class="banner-tab product-page-review-tab">
+    {% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: false, product: product %}
+  </div>
+  
+  
+</div>
+
+
+<script>
+    let banner_tabs = document.querySelectorAll('.banner-tab');
+    let banner_tab_links = document.querySelectorAll('.product-page-tab-banner p');
+
+  function activate_banner_tab(clicked_tab){
+    banner_tab_links.forEach((tab_banner) => tab_banner.classList.remove('banner-link-active'));
+    clicked_tab.classList.add('banner-link-active');
+
+    banner_tabs.forEach((banners) => banners.hidden = true);
+    let active_tab = document.querySelector(`.product-page-${clicked_tab.dataset.bannerTabName}-tab`)
+    active_tab.hidden = false;
+
+    active_tab.scrollIntoView({behavior: "smooth"});
+  }
+  
+    banner_tab_links.forEach((tab_banner) => tab_banner.addEventListener('click',(e) => activate_banner_tab(e.target)));
+    
+    banner_tab_links[0].classList.add('banner-link-active');
+    
+    banner_tabs.forEach((banners) => banners.hidden = true);
+    document.querySelector('.product-page-features-tab').hidden = false;
+
+  
+  
+  	// when clicked on the review stars
+    let review_stars = document.querySelector('.top-review-stars .overlay');
+    review_stars.addEventListener('click', function(e){
+//       e.preventDefault();
+      activate_banner_tab(document.querySelector("[data-banner-tab-name='review']"));
+    });
+
+    //sticky banner
+    const tabBanner = document.querySelector('.product-page-tab-banner');
+
+    const gallery = document.querySelector('.gallery');
+    const stickyHeader = function (entries){
+        const [entry] = entries;
+        console.log(entry);
+
+        if(!entry.isIntersecting) tabBanner.classList.add('stickyBanner')
+        else tabBanner.classList.remove('stickyBanner');
+    }
+
+    const galleryObserver = new IntersectionObserver(stickyHeader, {
+        root: null,
+        threshold: 0,
+    })
+
+    galleryObserver.observe(gallery);
+</script>
+
+{% schema %}
+{
+    "name": "Product Page Custom",
+    "settings": [
+        {
+            "type": "textarea",
+            "id": "features_tab_title",
+            "label": "Insert the name for the features tab",
+            "default": "Features"
+        },
+        {
+            "type": "textarea",
+            "id": "warranty_tab_title",
+            "label": "Insert the name for the warranty tab",
+            "default": "Warranty"
+        },
+        {
+            "type": "textarea",
+            "id": "specifications_tab_title",
+            "label": "Insert the name for the specifications tab",
+            "default": "Specifications"
+        },
+        {
+            "type": "textarea",
+            "id": "review_tab_title",
+            "label": "Insert the name for the review tab",
+            "default": "Review"
+        }
+    ],
+    "blocks": [
+        {
+            "name": "Gallery Swiper",
+            "type": "gallery-swiper",
+            "settings": []
+        },
+        {
+            "name": "Gallery Slide",
+            "type": "gallery-slide",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "gallery_image_1",
+                    "label": "Insert Image"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "gallery_image_2",
+                    "label": "Insert Image"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "gallery_image_3",
+                    "label": "Insert Image"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "gallery_image_4",
+                    "label": "Insert Image"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "gallery_image_5",
+                    "label": "Insert Image"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "gallery_image_6",
+                    "label": "Insert Image"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "gallery_image_7",
+                    "label": "Insert Image"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "gallery_image_8",
+                    "label": "Insert Image"
+                }
+            ]
+        },
+        
+        {
+            "name": "Pick your feel section",
+            "type": "pick-your-feel",
+            "settings": [
+
+                {
+                    "type": "textarea",
+                    "id": "feature_heading",
+                    "label": "Heading for the feature section"
+                },
+                {
+                    "type": "textarea",
+                    "id": "url_text",
+                    "label": "Insert Url Text"
+                },
+                {
+                    "type": "url",
+                    "id": "url_link",
+                    "label": "Insert Url"
+                },
+
+                {    
+                    "type": "textarea",
+                    "id": "tab_text_1",
+                    "label": "Tab Text"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "tab_image_1",
+                    "label": "Tab image"
+                },
+                {
+                    "type": "textarea",
+                    "id": "tab_heading_1",
+                    "label": "Tab Heading"
+                },
+                {
+                    "type": "textarea",
+                    "id": "tab_body_1",
+                    "label": "Tab Body"
+                },
+                
+
+
+
+
+
+                {    
+                    "type": "textarea",
+                    "id": "tab_text_2",
+                    "label": "Tab Text"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "tab_image_2",
+                    "label": "Tab image"
+                },
+                {
+                    "type": "textarea",
+                    "id": "tab_heading_2",
+                    "label": "Tab Heading"
+                },
+                {
+                    "type": "textarea",
+                    "id": "tab_body_2",
+                    "label": "Tab Body"
+                },
+
+
+
+
+                {    
+                    "type": "textarea",
+                    "id": "tab_text_3",
+                    "label": "Tab Text"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "tab_image_3",
+                    "label": "Tab image"
+                },
+                {
+                    "type": "textarea",
+                    "id": "tab_heading_3",
+                    "label": "Tab Heading"
+                },
+                {
+                    "type": "textarea",
+                    "id": "tab_body_3",
+                    "label": "Tab Body"
+                }
+            ]
+        },
+        {
+            "name": "Image with overlay text",
+            "type": "image-with-overlay-text",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "background_image",
+                    "label": "Background Image"
+                },
+                {
+                    "type": "textarea",
+                    "id": "overlay_text_heading",
+                    "label": "Text Heading"
+                },
+                {
+                    "type": "textarea",
+                    "id": "overlay_text",
+                    "label": "Text"
+                },
+                {
+                    "type": "color",
+                    "id": "text_color",
+                    "label": "Main Text Color",
+                    "default": "#212121"
+                },
+                {
+                    "type": "textarea",
+                    "id": "colored_text",
+                    "label": "Insert colored text"
+                },
+                {
+                    "type": "color",
+                    "id": "colored_text_color",
+                    "label": "Inser the color for the text",
+                    "default": "#212121"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "text_full_width",
+                    "label": "Set full width text",
+                    "default": true
+                },
+                {
+                    "type": "checkbox",
+                    "id": "is_on_left_half",
+                    "label": "Text of left half",
+                    "default": true
+                }
+            ]
+        },
+        {
+            "name": "Image with Text",
+            "type": "image-with-text",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image_with_text__image",
+                    "label": "Insert Image"
+                },
+                {
+                    "type": "textarea",
+                    "id": "image_with_text__heading",
+                    "label": "Heading",
+					"default": "Integrated, Adjustable Lumbar Support"
+                },
+                {
+                    "type": "textarea",
+                    "id": "image_with_text__body",
+                    "label": "Text"
+                }
+
+            ]
+        },
+        {
+            "name": "Sticky Media with text",
+            "type": "sticky-media-with-text",
+            "settings": [
+                {
+                    "type": "color",
+                    "id": "text_color",
+                    "label": "Select Text according to background image",
+                    "default": "#fff"
+                },
+				{
+                    "type": "color",
+                    "id": "text_color_mob",
+                    "label": "Select Text according to background image For Mobile View",
+                    "default": "#fff"
+                },
+                {
+                    "type": "textarea",
+                    "id": "sticky_media_with_text__content",
+                    "label": "Text"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "sticky_media_with_text__image",
+                    "label": "Insert Image"
+                },
+
+                {
+                    "type": "textarea",
+                    "id": "sticky_media_with_text__video",
+                    "label": "Video Url"
+                },
+
+                {
+                    "type": "checkbox",
+                    "id": "media_on_left",
+                    "label": "Media on left",
+                    "default": false
+                }
+            ]
+        },
+
+        {
+            "name": "Warranty Tab",
+            "type": "warranty-tab",
+            "settings": [
+                {
+                    "type": "textarea",
+                    "id": "warranty_tab_heading",
+                    "label": "Warrenty Tab Heading"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "warranty_tab_image",
+                    "label": "Warranty Tab Image"
+                },
+                {
+                    "type": "textarea",
+                    "id": "warranty_policy_heading_1",
+                    "label": "Warranty Policy 1 Heading "
+                },
+                {
+                    "type": "textarea",
+                    "id": "warranty_policy_body_1",
+                    "label": "Warranty Policy 1 Body "
+                },
+                {
+                    "type": "textarea",
+                    "id": "warranty_policy_button_text_1",
+                    "label": "Warranty Policy 1 Button Text "
+                },
+                {
+                    "type": "url",
+                    "id": "warranty_policy_button_link_1",
+                    "label": "Warranty Policy 1 Button Link "
+                },
+
+                {
+                    "type": "textarea",
+                    "id": "warranty_policy_heading_2",
+                    "label": "Warranty Policy 2 Heading "
+                },
+                {
+                    "type": "textarea",
+                    "id": "warranty_policy_body_2",
+                    "label": "Warranty Policy 2 Body "
+                },
+                {
+                    "type": "textarea",
+                    "id": "warranty_policy_button_text_2",
+                    "label": "Warranty Policy 2 Button Text "
+                },
+                {
+                    "type": "url",
+                    "id": "warranty_policy_button_link_2",
+                    "label": "Warranty Policy 2 Button Link "
+                }
+            ]
+        },
+
+        {
+            "name": "Specfications Tab",
+            "type": "specifications-tab",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "size_guide_image",
+                    "label": "Size Guide Image"
+                },
+                {
+                    "type": "text",
+                    "id": "height_svg",
+                    "label": "Insert the SVG for height"
+                },
+                {
+                    "type": "text",
+                    "id": "weight_svg",
+                    "label": "Insert the SVG for weight"
+                },
+                {
+                    "type": "text",
+                    "id": "kraken_min_height",
+                    "label": "Insert the Min height for Kraken",
+                    "default": "165"
+                },
+                {
+                    "type": "text",
+                    "id": "kraken_max_height",
+                    "label": "Insert the Max height for Kraken",
+                    "default": "190cm"
+                },
+                {
+                    "type": "text",
+                    "id": "kraken_weight",
+                    "label": "Insert the weight for Kraken",
+                    "default": "120kg"
+                },
+                {
+                    "type": "text",
+                    "id": "sphinx_min_height",
+                    "label": "Insert the Min height for sphinx",
+                    "default": "150"
+                },
+                {
+                    "type": "text",
+                    "id": "sphinx_max_height",
+                    "label": "Insert the Max height for sphinx",
+                    "default": "165cm"
+                },
+                {
+                    "type": "text",
+                    "id": "sphinx_weight",
+                    "label": "Insert the weight for sphinx",
+                    "default": "120kg"
+                },
+
+
+                {
+                    "type": "text",
+                    "id": "behemoth_min_height",
+                    "label": "Insert the Min height for behemoth",
+                    "default": "170"
+                },
+                {
+                    "type": "text",
+                    "id": "behemoth_max_height",
+                    "label": "Insert the Max height for behemoth",
+                    "default": "200cm"
+                },
+                {
+                    "type": "text",
+                    "id": "behemoth_weight",
+                    "label": "Insert the weight for behemoth",
+                    "default": "130kg"
+                }
+            ]
+        },
+
+        {
+            "name": "Faq",
+            "type": "faq",
+            "settings": [
+                {
+                    "type": "textarea",
+                    "id": "faq_heading",
+                    "label": "Faq Heading",
+                    "default": "Frequently Asked Questions"
+                },
+                {
+                    "type": "textarea",
+                    "id": "faq_button_text",
+                    "label": "FAQ Button Text",
+                    "default": "View FAQ Page"
+                },
+                {
+                    "type": "url",
+                    "id": "faq_button_link",
+                    "label": "FAQ Button Link"
+                },
+                {
+                    "type": "textarea",
+                    "id": "faq_question_1",
+                    "label": "Faq Question 1",
+                    "default": "How do I know if a Secretlab chair will be a good fit for me?"
+                },
+                {
+                    "type": "textarea",
+                    "id": "faq_answer_1",
+                    "label": "Faq Answer 1"
+                },
+                {
+                    "type": "textarea",
+                    "id": "faq_question_2",
+                    "label": "Faq Question 2",
+                    "default": "How do I assemble my Secretlab Chair?"
+                },
+                {
+                    "type": "textarea",
+                    "id": "faq_answer_2",
+                    "label": "Faq Answer 2"
+                },
+                {
+                    "type": "textarea",
+                    "id": "faq_question_3",
+                    "label": "Faq Question 3",
+                    "default": "How do I take care of my Secretlab chair?"
+                },
+                {
+                    "type": "textarea",
+                    "id": "faq_answer_3",
+                    "label": "Faq Answer 3"
+                }
+            ]
+        },
+
+        {
+            "name": "What's in the box",
+            "type": "what-in-the-box",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "item_image",
+                    "label": "Image of items in the box"
+                },
+                {
+                    "type": "textarea",
+                    "id": "heading",
+                    "label": "Heading",
+                    "default": "What's in the box"
+                },
+                {
+                    "type": "textarea",
+                    "id": "item_list",
+                    "label": "List of items in the box"
+                }
+            ]
+        },
+
+        {
+            "name": "Youtube Video",
+            "type": "youtube-video",
+            "settings": [
+                {
+                    "type": "textarea",
+                    "id": "youtube_video_title",
+                    "label": "Youtube Video Title"
+                },
+                {
+                    "type": "video_url",
+                    "id": "video_url",
+                    "label": "YouTube video URL",
+                    "accept": ["youtube", "vimeo"]
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}
