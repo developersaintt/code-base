@@ -1,0 +1,32 @@
+{% comment %}
+    Accept image as a variable 
+    className as a variable
+{% include 'lazy-image' with image: block.settings.image, className: 'className' %}
+wrap the {% include 'lazy-image' with image: block.settings.image %} in the div below in case you need the same height images
+Make sure to wrap in the calling section/template or snippit and do not warp in this snippit to keep it more general
+<div
+    class="lazy__image_wrapper"
+    style="padding-top: {{ 1 | divided_by: image.aspect_ratio | times: 100}}%">
+    </div>
+{% endcomment %}
+<img
+    class="lazyload blur--up {{className}}"
+    data-sizes="auto"
+    data-src="{{image | img_url : '180x'}}"
+    data-srcset="
+    {{image | img_url : '220x'}} 220w,
+    {{image | img_url : '300x'}} 300w,
+    {{image | img_url : '600x'}} 600w,
+    {{image | img_url : '900x'}} 900w,
+    {{image | img_url : '1080x'}} 1080w,
+    {{image | img_url : '1296x'}} 1296w,
+    {{image | img_url : '1512x'}} 1512w,
+    {{image | img_url : '1728x'}} 1728w,
+    {{image | img_url : '1944x'}} 1944w,
+    {{image | img_url : '2048x'}} 2048w">
+<noscript>
+    <img
+        class="lazyloaded"
+        src="{{ image | img_url: '300x' }}"
+        alt="{{ image.alt }}">
+</noscript>
