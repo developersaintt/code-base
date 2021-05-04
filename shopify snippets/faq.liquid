@@ -1,86 +1,44 @@
 <style>
 /*======================== Product Faq Section Settings=======================*/
-.question {
-  color: var(--color-blue-accent-3);
-  cursor: pointer;
-  padding: 18px;
-  padding-left: 0;
-  font-weight: bold;
-  max-width: 100%;
-  transition: 0.4s;
-}
-
-.question:after {
-  content: '\002B';
-  font-weight: bold;
-  float: right;
-  margin-left: 5px;
-}
-
-.question.active:after {
-  content: "\2212";
-}
-
-.answer {
-  padding: 0 1.5rem;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease-out;
-}
-
-.faqs .faq-wrapper:nth-of-type(n){
-  border-bottom: 1px solid var(--color-grey-accent-2);
-}
-.faqs .faq-wrapper:last-child{
-  border-bottom: none;
-}
-.faq.col-2--30-auto .faqs{
-  padding-left:30px;
-}
-.faq-wrapper .question{
-  margin-bottom:0px;
-}
-
-@media(max-width:768px){
-  .faq.col-2--30-auto{
-    text-align:center;
-    padding:0px 15px;
-  }
-  .faq.col-2--30-auto .faqs{
-    text-align:left;
-    padding:0px;
-  }
-  .faq-wrapper .question{
-    position:relative;
-  }
-  .faq-wrapper .question:after{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    right:5px;
-  }
-}
+.accordian-header {
+        color: var(--color-blue-accent-3);
+        cursor: pointer;
+        padding-left: 0;
+        padding-bottom: 15px;
+        font-weight: bold;
+        max-width: 100%;
+        transition: 0.4s;
+        border-bottom: 1px solid #555555;
+    }
+    .accordian-header:after {
+        content: '\002B';
+        font-weight: bold;
+        float: right;
+        margin-left: 5px;
+    }
+    .accordian-header.active:after {
+        content: "\2212";
+    }
+    .accordian-body {
+        padding: 0 1.5rem;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-out;
+    }
 </style>
 
-
-<div class="faqs">
-    <div class="faq-wrapper">
-        <p class="question body bold">{{faq_question_1 | newline_to_br }}</p>
-        <div class="answer"> <p class="body">{{faq_answer_1 | newline_to_br }}</p> </div>
-    </div>
-</div>
     
     
 <script>
-    let questions = document.querySelectorAll('.question');
-    questions.forEach((question) => question.addEventListener('click', function(){
-        this.classList.toggle("active");
-        var answer = this.nextElementSibling;
-        if (answer.style.maxHeight){
-            answer.style.maxHeight = null;
-        } 
-        else {
-            answer.style.maxHeight = answer.scrollHeight + "px";
-        } 
-    }))
+   let accordian_headers = document.querySelectorAll('.accordian-header');
+  accordian_headers.forEach((accordian_header) => accordian_header.addEventListener('click', function(e){
+    this.classList.toggle("active");
+    var accordian_body = this.nextElementSibling;
+    if (accordian_body.style.maxHeight)  {
+        accordian_body.style.maxHeight = null;
+    } 
+    else {
+        accordian_body.style.maxHeight = accordian_body.scrollHeight + "px";
+    } 
+}))
 </script>
