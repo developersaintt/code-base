@@ -1,0 +1,179 @@
+<style>
+  .immerse-yourself-parent .body--text .whole{
+    display: inline-flex;
+    flex-direction: column;
+    margin-top: 64px;
+    color: var(--color-primary);
+  }
+  
+  .immerse-yourself{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: max-content;
+  }
+  .immerse-yourself-parent .content{
+    height: max-content;
+    max-width: 680px;
+    padding-left: 140px;
+  }
+  .immerse-yourself-parent .content.left{
+    left: 0;
+    top: 118px;
+    width: 100%;  
+  }
+  
+  @media(max-width: 1200px){
+    .immerse-yourself-parent .content{
+      max-width: 600px;
+      padding-left: 64px;
+    }
+  }
+  @media(max-width: 1024px){
+    .immerse-yourself-parent .content{
+      max-width: 420px;
+      padding-left: 48px;
+    }
+  }
+  @media(max-width: 767px){
+    
+    .immerse-yourself-parent .content{
+      padding-left: 24px;
+    }
+   
+    .immerse-yourself-parent-{{section.id}}{
+      background-size: cover;
+      background-position: 73%;
+      display: flex;
+      align-items: flex-end;
+      height: 564px !important; 
+      background-image:url('{{section.settings.image | img_url: 'master'}}');
+     }
+  .immerse-yourself{
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      min-height: 100vh;
+    }
+  }
+
+  
+  
+</style>
+
+
+<div class="immerse-yourself-parent immerse-yourself-parent-{{section.id}}" 
+     data-scroll-opacity-animation>
+  <div class="immerse-yourself" 
+       style="background-image:url('{{section.settings.image | img_url: 'master'}}')">
+
+  </div>
+  <div class="internal">
+    <div class="content left tl">
+
+      {% unless section.settings.subtitle == blank %}
+      <p class="subtitle">{{section.settings.subtitle}} </p>
+      {% endunless%}
+
+      {% unless section.settings.title == blank %}
+      <h2 class="extra-bold">{{section.settings.title}} </h2>
+      {% endunless%}
+
+      {% unless section.settings.body == blank %}
+      <p class="body--text">{{section.settings.body | newline_to_br}}</p>
+      {% endunless%}
+
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+  if( window.innerWidth >= 767){
+  const stickyParent = document.querySelectorAll('.immerse-yourself-parent-{{section.id}}');
+
+  const changeOpacity = function (entries){
+    const [entry] = entries;
+    console.log(entry);
+    if(entry.isIntersecting){
+      console.log(entry.target)
+      entry.target.querySelector('.content').style.position = "fixed"
+      entry.target.querySelector('.content').style.top = "112px"
+    }
+    else{
+      entry.target.querySelector('.content').style.position = "absolute"
+      entry.target.querySelector('.content').style.bottom = "64px"
+    }
+  }
+  const stickyParentObserver = new IntersectionObserver(changeOpacity, {
+    root: null,
+    threshold: .5,
+  })
+
+  stickyParent.forEach(sp =>{
+    stickyParentObserver.observe(sp);
+  })
+
+
+  window.addEventListener('scroll', (e)=>{
+
+    
+    stickyParent.forEach(sp =>{
+
+      let currentPositionTop = window.pageYOffset - sp.offsetTop
+      
+      if(window.pageYOffset - sp.offsetTop > 0){
+        let nomalized = (currentPositionTop - 0)/sp.offsetHeight
+        let opacity = nomalized *2
+        sp.querySelector('.content').style.opacity  = opacity
+      }
+
+    })
+  })
+}
+  
+</script>
+{% schema %}
+  {
+    "name": "Immerse Yourself",
+    "settings": [
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "Image"
+		},
+		{
+			"type": "text",
+			"id": "subtitle",
+			"label": "Sub Title"
+		},
+		{
+			"type": "textarea",
+			"id": "title",
+			"label": "Title"
+		},
+		{
+			"type": "textarea",
+			"id": "body",
+			"label": "Body Text"
+		},
+		{
+			"type": "range",
+			"id": "max_width",
+			"min": 100,
+			"max": 1100,
+			"step": 10,
+			"label": "Maximum Width",
+			"unit": "px",
+			"default": 400
+		}
+	],
+	"presets": [
+		{
+			"name": "Immerse Yourself",
+			"category": "Custom"
+		}
+	]
+  }
+{% endschema %}
