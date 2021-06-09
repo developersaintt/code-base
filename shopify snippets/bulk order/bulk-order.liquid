@@ -1,0 +1,288 @@
+<style>
+  .color-box{
+    background-repeat: no-repeat;
+    width: 50px;
+    height: 25px;
+    border-radius: 3px;
+    margin-right: 3px;
+    background-size: contain;
+  }
+  .color-box-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .size-option{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .size-option span{
+    margin-right: 15px;
+  }
+  .color-option{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+  }
+  .quantity-selector-row input{
+        max-width: 50px;
+    margin-bottom: 0;
+    margin-right: 10px;
+    padding: 7px;
+    -moz-appearance: textfield;
+  }
+  
+  .quantity-selector-row input:disabled{
+    background-color: #212121;
+    opacity: .4;
+  }
+  
+  .quantity-selector-row input::-webkit-outer-spin-button,
+  .quantity-selector-row input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  .quantity-selector-row{
+    display: flex;
+  }
+</style>
+{%- assign file_extension = 'png' -%}
+
+{%- assign swatch = option -%}
+{%- assign found_option = false -%}
+{%- assign is_color = false -%}
+{%- assign option_index = 0 -%}
+
+{% for option in product.options %}
+{% if option == swatch %}
+{%- assign found_option = true -%}
+{%- assign option_index = forloop.index0 -%}
+{%- assign downcased_option = swatch | downcase -%}
+
+{% if downcased_option contains 'color' or downcased_option contains 'colour' %}
+{%- assign is_color = true -%}
+{% endif %}
+{% endif %}
+{% endfor %}
+<div class="bulk-order">
+  
+  <div class="size-option">
+    {% for value in product.options_by_name['Size'].values %}
+    <span> {{ value |capitalize  }} </span>    
+  	{% endfor %}
+  </div>
+  
+  
+  {% for color_value in product.options_by_name['Color'].values %}
+  <div class="color-option">
+    <div class="color-box-wrapper">
+      <div class="color-box" style="background-image: url({{ color_value | handle | append: '.' | append: file_extension | asset_img_url: '50x' }}); background-color: {{ color_value | split: ' ' | last | handle }};"> </div>
+      {{ color_value | capitalize }} 
+    </div>
+    <div class="quantity-selector-row">
+      {% for size_value in product.options_by_name['Size'].values %}
+      <input type="number" min="0" value="0" onchange="checkInsertedQuantity(this)" disabled data-size-option="{{ size_value }}" data-color-option="{{ color_value }}">  
+
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+  {% if show_total%}
+  <div class="bulk-price"> <span> Total Price</span> <span class="product__price"> {{0 | money}} </span></div>
+  {% endif %}
+  <button type="button" name="add" class="add-bulk ajax-submit action_button action_button--secondary " data-label="Buy in Bulk">
+    <span class="text">Add to Cart</span>
+  </button>
+  
+  <button type="button" name="add" class="add-bulk" data-label="Buy in Bulk">
+    <span class="text">Buy Now</span>
+  </button>
+</div>
+
+
+
+<script>
+var theme = {
+        moneyFormat: {{ shop.money_format | json }}
+
+      }
+    
+    
+    theme.Currency = (function() {
+    var moneyFormat = theme.moneyFormat;
+
+    function formatMoney(cents, format) {
+      if (typeof cents === 'string') {
+        cents = cents.replace('.', '');
+      }
+      var value = '';
+      var placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+      var formatString = format || moneyFormat;
+      function formatWithDelimiters(number, precision, thousands, decimal) {
+        thousands = thousands || ',';
+        decimal = decimal || '.';
+
+        if (isNaN(number) || number === null) {
+          return 0;
+        }
+
+        number = (number / 100.0).toFixed(precision);
+
+        var parts = number.split('.');
+        var dollarsAmount = parts[0].replace(
+          /(\d)(?=(\d\d\d)+(?!\d))/g,
+          '$1' + thousands
+        );
+        var centsAmount = parts[1] ? decimal + parts[1] : '';
+
+        return dollarsAmount + centsAmount;
+      }
+
+      switch (formatString.match(placeholderRegex)[1]) {
+        case 'amount':
+          value = formatWithDelimiters(cents, 2);
+          break;
+        case 'amount_no_decimals':
+          value = formatWithDelimiters(cents, 0);
+          break;
+        case 'amount_with_comma_separator':
+          value = formatWithDelimiters(cents, 2, '.', ',');
+          break;
+        case 'amount_no_decimals_with_comma_separator':
+          value = formatWithDelimiters(cents, 0, '.', ',');
+          break;
+        case 'amount_no_decimals_with_space_separator':
+          value = formatWithDelimiters(cents, 0, ' ');
+          break;
+        case 'amount_with_apostrophe_separator':
+          value = formatWithDelimiters(cents, 2, "'");
+          break;
+      }
+
+      return formatString.replace(placeholderRegex, value);
+    }
+
+    return {
+      formatMoney: formatMoney
+    };
+  })();
+  
+  
+  
+//   const currency = data.currency;
+//   const price = theme.Currency.formatMoney(product.price, theme.moneyFormat)
+  
+  
+  window.addEventListener('DOMContentLoaded', () => {
+                          {% unless show_original_product_form%}
+                          document.querySelector('.swatch[data-option-index="0"]').style.display = "none"
+                          document.querySelector('.purchase-details.smart-payment-button--true').style.display = "none"
+                          {%endunless%}
+                  
+  let variant_quantity = JSON.parse(document.querySelector("#VariantJson-{{ section.id }}").innerHTML)
+  let product = JSON.parse(document.querySelector("#ProductJson-{{ section.id }}").innerHTML)
+	console.log(product)
+	let product_variants = product.variants
+
+	document.querySelectorAll('.quantity-selector-row').forEach(quantity_row => {
+    quantity_row.querySelectorAll('input').forEach(selector => {
+      let size_var = selector.dataset.sizeOption
+      let color_var = selector.dataset.colorOption
+      console.log(selector)
+      for (product_variant of product_variants){
+        
+        if(product_variant.options.includes(size_var) && product_variant.options.includes(color_var)){
+          selector.dataset.variantId = product_variant.id
+          selector.dataset.price = product_variant.price
+          selector.disabled = false
+        }
+      }
+    })
+  })
+    function setMaxQuantities(){
+    document.querySelectorAll('.quantity-selector-row').forEach(quantity_row => {
+      quantity_row.querySelectorAll('input').forEach(selector => {
+        selector.max = variant_quantity[selector.dataset.variantId]
+      })
+    })
+  }
+    setMaxQuantities()
+  })
+  
+  function checkInsertedQuantity(e){
+    console.log(e)
+    let currentValue = parseFloat(e.value)
+    let maxvalue = parseFloat(e.max)
+    
+    if (currentValue > maxvalue){
+      e.value = e.max
+    }
+    if(currentValue < 0 ){
+      e.value= 0
+    }
+    if (e.value == ""){
+      e.value = 0
+    }
+    let total_bulk_price = 0
+    document.querySelectorAll('.quantity-selector-row').forEach(quantity_row => {
+      quantity_row.querySelectorAll('input').forEach(selector => {
+        if (selector.value > 0){
+          total_bulk_price += (selector.dataset.price * selector.value) 
+        }
+      })
+    })
+    
+    document.querySelector('.bulk-price span.product__price').innerHTML = Shopify.formatMoney(total_bulk_price, {{ shop.money_format | json }})
+    
+  }
+  document.querySelectorAll('.bulk-order .add-bulk').forEach(btn => btn.addEventListener('click', (e) =>{
+    e.preventDefault()
+    let itms =[];
+    
+    document.querySelectorAll('.quantity-selector-row input').forEach(qs =>{
+      if (!(qs.value == 0 || qs.disabled)){
+        itms.push({
+        'id': qs.dataset.variantId,
+        'quantity': qs.value
+      })
+      }
+      
+      
+    })
+    
+    console.log(itms)
+    let formData = {
+      'items': itms
+    };
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      console.log(btn)
+      if(!btn.classList.contains('ajax-submit')){
+          location.assign('/cart')
+        }
+      let currentCartCount = parseFloat(document.querySelector('.cart_count').innerHTML)
+      
+      for(itm of itms){
+        currentCartCount += parseFloat(itm.quantity)
+      }
+      document.querySelector('.cart_count').innerHTML = currentCartCount
+      console.log(data)
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+
+  }))
+
+</script>
