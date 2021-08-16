@@ -1,0 +1,47 @@
+
+<style>
+.sticky-form.stick{
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  z-index: 20;
+  height: 90px;
+}
+</style>
+
+<script>
+
+  window.addEventListener('DOMContentLoaded', (e)=>{
+    document.querySelector('.product-single__form').style.height = `${document.querySelector('.product-single__form').scrollHeight}px`
+  })
+
+  if( window.innerWidth <= 768){
+    const elementToObserve = document.querySelector('.product-single__form');
+    const elementToStick = document.querySelector('.sticky-form')
+    let crossed_once = false
+
+    const makeFormSticky = function (entries){
+      const [entry] = entries;
+      console.log(entry);
+      if(entry.isIntersecting){
+        elementToStick.classList.remove('stick')
+      } 
+      else{
+        if(entry.boundingClientRect.top < 0){
+          elementToStick.classList.add('stick')
+        }
+      }
+    }
+    const stickyFormObserver = new IntersectionObserver(makeFormSticky, {
+      root: null,
+      threshold: 0,
+    })
+    stickyFormObserver.observe(elementToObserve);
+  }
+</script>
