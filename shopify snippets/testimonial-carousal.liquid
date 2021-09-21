@@ -1,0 +1,324 @@
+<style>
+  .hide{
+    display: none !important;
+  }
+  .tc{
+    text-align: center;
+  }
+  .testimonial-carousal-wrapper{
+    padding: 40px 50px;
+    transition: all .3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .testimonial-carousal{
+    padding: 100px 0px;
+  }
+  .image-wrapper{
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  .image-wrapper img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .testimonial-carousal__caption{
+    margin-top: 10px !important;
+  }
+  .testimonial-carousal .play-button{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    -webkit-filter: drop-shadow(12px 12px 12px rgba(0,0,0,0.5));
+  }
+  .testimonial-carousal .play-button svg,
+  .testimonial-carousal .play-button.image-wrapper{
+    width: 40px;
+    height: 40px;
+  }
+  .testimonial-carousal .play-button img{
+    object-fit: contain;
+  }
+  .testimonial-carousal .swiper-slide{
+    cursor:pointer;
+    width: 28%;
+    transition: all .7s ease;
+    margin-right: 95px;
+    margin-left: 95px;
+  }
+  .testimonial-carousal .swiper-slide .testimonial-image{
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  }
+  .testimonial-carousal .swiper-slide .image-wrapper:before{
+    content: " ";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    border-radius: 10px;
+    background-color: rgba(62, 52, 108, 0.59);
+  }
+  .testimonial-carousal .swiper-slide-active .image-wrapper:before{
+    content: none;
+  }
+  .testimonial-carousal .swiper-slide-active{
+    transform: scale(1.5)
+  }
+  
+  .testimonial-carousal .swiper-button-prev:after,
+  .testimonial-carousal .swiper-button-next:after{
+    content:'';
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 30px;
+    height: 30px;
+    background-image:url("{{'chevron-left.svg' | asset_url}}")
+  }
+  .testimonial-carousal .swiper-button-next:after{
+    transform: rotate(180deg)
+  }
+  .testimonial-carousal .swiper-button-prev, 
+  .testimonial-carousal .swiper-button-next {
+    background-color: white;
+    border-radius: 50%;
+    padding: 15px;
+    width: 40px;
+    height: 40px;
+    -webkit-filter: drop-shadow(12px 12px 12px rgba(0,0,0,0.5));
+  }
+  
+  .video-testimonial__modal-wrapper{
+    background-color: rgba(0,0,0,.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 40;
+  }
+  .video-testimonial__modal{
+    max-width: 900px;
+    height: 90%;
+    position: relative;
+    cursor: pointer;
+  }
+  .video-testimonial__modal .close-modal{
+    position: absolute;
+    right:0px;
+    top:0px;
+    transform: translateY(-30px);
+  }
+  .video-testimonial__modal .close-modal svg{
+    width: 20px;
+    height: 20px;
+  }
+  
+  @media(max-width: 768px){
+    .testimonial-carousal .swiper-slide-active{
+      transform: scale(1.1)
+    }
+    .testimonial-carousal .swiper-slide{
+      width: 55%;
+    }
+    .testimonial-carousal .swiper-button-next {
+      -webkit-filter: drop-shadow(-12px 12px 12px rgba(0,0,0,0.5));
+    }
+    .testimonial-carousal-wrapper{
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .testimonial-carousal{
+      padding: 50px 0px;
+    }
+  }
+  @media(max-width: 500px){
+    .testimonial-carousal .swiper-slide{
+      width: 75%;
+    }
+  }
+</style>
+
+
+<div class="testimonial-carousal-wrapper">
+  <h2 class="SectionHeader__Heading Heading u-h1 tc">{{section.settings.heading}}</h2>
+  <div class="swiper-container testimonial-carousal testimonial-carousal-{{section.id}}">
+    <div class="swiper-wrapper">
+      {%for block in section.blocks%}
+      	{%if block.type=='image_slide'%}
+      		<div class="swiper-slide">
+              <div class="image-wrapper">
+                <img src="{{block.settings.testimonial_image | img_url: 'master'}}" class="testimonial-image">
+              </div>
+              <p class="SectionHeader__SubHeading Heading u-h6 tc testimonial-carousal__caption">{{block.settings.caption}}</p>
+      		</div>
+      	{%endif%}
+      
+      
+      	{%if block.type=='video_slide'%}
+      		<div class="swiper-slide video-testimonial" data-video-src="{{block.settings.video_url}}">
+              <div class="image-wrapper">
+                {%if section.settings.play_svg != blank%}<span class="play-button">{{section.settings.play_svg}}</span> {%endif%}
+                {%if section.settings.play_svg__image != blank%}<span class="image-wrapper play-button"><img src="{{section.settings.play_svg__image | img_url:  'master'}}"></span> {%endif%}
+                <img src="{{block.settings.thumbnail_image  | img_url: 'master'}}" class="testimonial-image">
+              </div>
+              <p class="SectionHeader__SubHeading Heading u-h6 tc testimonial-carousal__caption">{{block.settings.caption}}</p>
+      		</div>
+      	{%endif%}
+      
+      
+      {%endfor%}
+    </div>
+
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+
+  </div>
+  
+  <div class="hide video-testimonial__modal-wrapper">
+    <div class="video-testimonial__modal">
+      <span class="close-modal"> {%render 'cross.svg'%}</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  var swiper = new Swiper('.swiper-container.testimonial-carousal-{{section.id}}', {
+                          loop: true,
+                          centeredSlides: true,
+    slidesPerView: 'auto',
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+
+  });
+  
+</script>
+
+
+
+
+
+
+
+// Put this script in a separate js file
+<script>
+let testimonial_video_slides = document.querySelectorAll('.swiper-slide.video-testimonial')
+let testimonial_vide_close = document.querySelectorAll('.video-testimonial__modal-wrapper .close-modal')
+
+testimonial_video_slides.forEach(videoSlide =>{
+  videoSlide.addEventListener('click', (e)=>{
+    e.target.closest('.testimonial-carousal-wrapper').querySelector('.video-testimonial__modal-wrapper').classList.remove('hide')
+
+    let source = document.createElement('source')
+    let video = document.createElement('video')
+    video.setAttribute('height', '100%');
+    video.setAttribute('width', '100%');
+    video.setAttribute("controls","controls")
+
+
+    source.setAttribute('src', e.target.closest('.swiper-slide.video-testimonial').dataset.videoSrc)
+    video.appendChild(source)
+
+    e.target.closest('.testimonial-carousal-wrapper').querySelector('.video-testimonial__modal').appendChild(video)
+
+    video.play()
+  })
+})
+
+testimonial_vide_close.forEach(video_modal_close =>{
+  video_modal_close.addEventListener('click', (e)=>{
+    e.target.closest('.video-testimonial__modal-wrapper').classList.add('hide')
+    e.target.closest('.close-modal').nextElementSibling.remove()
+  })
+})
+
+</script>
+
+{% schema %}
+  {
+    "name": "Testimonial Carousal",
+    "settings": [
+		{
+			"type": "richtext",
+			"label": "Carousal Heading",
+			"id": "heading"
+		},
+		{
+            "type": "text",
+            "id": "play_svg",
+            "label": "Play SVG Code"
+		},
+		{
+            "type": "image_picker",
+            "id": "play_svg__image",
+            "label": "Play SVG Image",
+			"info": "If you don't have the svg you can also use Image. Please remove any text in the svg input to make this work"
+		}
+	],
+	"blocks":[
+		{
+			"name": "Image Slide",
+			"type": "image_slide",
+			"settings": [
+				{
+					"type": "image_picker",
+					"label": "Testimoinal Image",
+					"id": "testimonial_image"
+				},
+				{
+					"type": "text",
+					"id": "caption",
+					"label": "Slide Caption",
+					"default": "Slide Caption"
+				}
+			]
+		},
+		{
+			"name": "Video Slide",
+			"type": "video_slide",
+			"settings": [
+				{
+					"type": "image_picker",
+					"label": "Thumbnail Image",
+					"id": "thumbnail_image"
+				},
+				{
+					"type": "text",
+					"id": "video_url",
+					"label": "Video Url Caption"
+				},
+				{
+					"type": "text",
+					"id": "caption",
+					"label": "Slide Caption",
+					"default": "Slide Caption"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Testimonial Carousal",
+			"category": "Review"
+		}
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
