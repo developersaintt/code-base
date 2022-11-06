@@ -3,29 +3,29 @@
     "name": {
       "string": {}
     },
-    "avatarUrl": {
-      "regexp": "https://i\\.pravatar\\.cc/150\\?u=[0-9]{5}"
+    "email": {
+      "regexp": "#[a-z]{5,10}@[a-z]{5}\\.[a-z]{2,3}"
+    }
+  },
+  
+  "screenshot": {
+    "name": {
+      "string": {}
     },
-    "statusMessage": {
-      "string": [
-        "working from home",
-        "watching Netflix"
-      ]
+    "fileName": { 
+      "regexp": "[A-Z][a-z]{5,10}" 
     },
     "email": {
       "regexp": "#[a-z]{5,10}@[a-z]{5}\\.[a-z]{2,3}"
+    },  
+    "src": {
+      "regexp": "https://picsum\\.photos/seed/[0-9]{5}/1920/1080"
     },
-    "color": {
-      "regexp": "#[0-9A-F]{6}"
-    },
-    "age": {
-      "int": {
-        "min": 21,
-        "max": 100
+    "takenAt: {
+      "dateTime": {
+        "min": "2010-01-01T00:00:00Z",
+        "max": "2020-12-31T23:59:59Z"
       }
-    },
-    "isPublic": {
-      "boolean": {}
     }
   }
 }
