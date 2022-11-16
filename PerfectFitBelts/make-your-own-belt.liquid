@@ -1,0 +1,552 @@
+<style>
+  .make-your-own-belt{
+    --steps-bar-color: {{section.settings.accent_color}};
+    --radio-button-color: {{section.settings.accent_color}};
+    --font-color: {{section.settings.font_color}};
+  }
+</style>
+
+<link rel="stylesheet" href="{{'component-make-your-own-belt.css' | asset_url }}">
+<div class="index-section">
+  <div class="page-width">
+    <div id="MakeYourOwnBelt-{{section.id}}" class="make-your-own-belt">
+
+      <div class="steps-bar">
+        {%- comment -%}
+        <div class="swiper-pagination-custom"></div>
+        {%- endcomment -%}
+
+        {% for i in (1..4) %}
+          <div class="steps-bar__step {% if i == 1 %} step--active {% endif %}" data-index="{{i}}">
+            Step {{i}}
+          </div>
+        {% endfor %}
+      </div>
+
+
+      <div class="swiper make-your-own-belt-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide myob-step" data-step="1">
+            <div class="page-width page-width--narrow">
+              <h2 class="text-center">Pick Belt Width</h2>
+  
+              <div class="belt-width-radio-buttons-wrapper">
+                <input type="radio" id="4" value="4cm" name="belt-width" checked>
+                <label for="4">
+                  <span class="belt-width">4cm</span>
+                  <ul>
+                    <li>Most Common Size</li>
+                    <li>More Styles To Choose From</li>
+                    <li>Can Be Casual Or Formal</li>
+                  </ul>
+                </label>
+
+
+                <input type="radio" id="3.5" value="{{'3.5cm' | handleize}}" name="belt-width" >
+                <label for="3.5">
+                  <span class="belt-width">3.5cm</span>
+                  <ul>
+                    <li>Smaller Collection</li>
+                    <li>Less Options To Choose From</li>
+                    <li>Usually Formal</li>
+                  </ul>
+                </label>
+  
+              </div>
+            </div>
+          </div>     
+
+          <div class="swiper-slide myob-step" data-step="2" data-base-path="/collections/{width}-buckles" data-filter-route="">
+            <h3 class="h2 text-center">Choose Your Buckle</h3>
+            <div data-buckle-collection-placeholder data-collection-type="buckle"></div>
+            {% render 'loading-spinner' %}
+          </div>
+
+          <div class="swiper-slide myob-step" data-step="3" data-base-path="/collections/{width}-straps" data-filter-route="">
+            <div class="text-center page-width page-width--narrow">
+              <h3 class="h2 text-center">Now Choose Your Strap</h3>
+              <p> <span class="emphasized-word">Important: </span> When you are selecting a size you can pick any size BIGGER than your size</p>
+              <p>For Example: If you want a size 36 but there is only size 42 available that will work for you since you will be cutting it to your size. </p>
+            </div>
+            <div data-strap-collection-placeholder data-collection-type="strap"></div>
+            {% render 'loading-spinner' %}
+          </div>
+
+          
+          <div class="swiper-slide myob-step" data-step="4">
+            <h3 class="h2 text-center">Complete Belt</h3>
+            <div class="complete-belt" data-complete-belt-placeholder>
+              <div class="grid">
+                <div class="grid__item medium-up--one-whole small--one-whole">
+                  <div class="grid complete-belt__products-wrapper">
+                    <div class="grid__item medium-up--one-half small--one-half text-center">
+                      <div class="complete-belt__images-wrapper">
+                        <div class="image-wrapper"data-buckle-image-placeholder></div>
+                        <div class="image-wrapper complete-belt__product-secondary-image" data-buckle-image-2-placeholder></div>
+                      </div>
+                      <div data-buckle-title-placeholder></div>
+                      <div data-buckle-variant-placeholder></div>
+                    </div>
+                    <div class="grid__item medium-up--one-half small--one-half text-center">
+                      <div class="complete-belt__images-wrapper">
+                        <div class="image-wrapper" data-strap-image-placeholder></div>
+                        <div class="image-wrapper complete-belt__product-secondary-image" data-strap-image-2-placeholder></div>
+                      </div>
+                      <div data-strap-title-placeholder></div>
+                      <div data-strap-variant-placeholder></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="grid__item medium-up--one-whole small--one-whole complete-belt__information">
+                  <!-- <div class="h3"> Complete Belt</div> -->
+                  <div class="complete-belt__price">
+                    <span>Total Price: </span>
+                    <span data-total-price-placeholder></span>
+                  </div>
+                  
+                  <p>How do they look together? Ready to add it to your cart?</p>
+                  <button class="btn btn--primary" data-add-complete-belt-to-cart >Add To Cart</button>
+
+                  <small>Don't like how they look together? Start over by clicking  <a href="/pages/make-your-own-belt" style="text-decoration: underline;">here</a> </small>
+                  
+                  
+                  <div data-product-descriptions-placeholder></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="continue-popup hide">
+              <div class="continue-popup__inner">
+                Congrats 🎉 You just made yourself a belt.
+  
+                <div class="continue-popup__buttons-row">
+                  <a href="/" class="btn btn--primary"> Continue Shopping</a>
+                  <a href="/cart" class="btn btn--primary"> Goto Cart</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      
+      <div class="selected-buckle-preview selected-buckle-preview--right" data-selected-buckle-preview></div>
+      <div class="swiper-buttons-wrapper">
+        <button class="btn btn-secondary swiper-button--prev"> Prev </button>
+        <span class="next-slide-prompt"> Please Make a selection</span>
+        <button class="btn btn-secondary swiper-button--next"> Next </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+
+  class MakeYourOwnBelt {
+    constructor(){
+      this.selectors = {
+        container: '[id^=MakeYourOwnBelt]',
+        nextButton: '.swiper-button--next',
+        prevButton: '.swiper-button--prev',
+        stepbar: '.steps-bar',
+        stepbarStep: '.steps-bar__step',
+        swiper:'.make-your-own-belt-swiper',
+
+        strapCollectionPlaceholder: '[data-strap-collection-placeholder]',
+        buckleCollectionPlaceholder: '[data-buckle-collection-placeholder]',
+
+        selectedBucklePreview: "[data-selected-buckle-preview]",
+
+        gridProduct: '.grid-product',
+        completeProduct: '[data-complete-belt-placeholder]',
+        
+        addPackToCartBtn: '[data-add-complete-belt-to-cart]',
+        beltWidthRadio: 'input[name="belt-width"]',
+        nextSlidePrompt: '.next-slide-prompt',
+
+        continuePopup: ".continue-popup",
+        swiperButtonsRow: ".swiper-buttons-wrapper"
+      }
+      
+      this.state = {
+        beltWidth: null,
+        buckle: { handle: "",  id: "", title: "", image: "", variant: "" },
+        strap: { handle: "", id: "", title: "", image: "", variant: "" },
+        suggestedStrap: []
+      }
+
+      this.swiper = new Swiper(this.selectors.swiper, {
+        slidesPerView: 1,
+        allowTouchMove: false,
+        autoHeight: true,
+        pagination: {
+          el: ".swiper-pagination-custom",
+          clickable: true,
+          renderBullet: function (index, className) {
+            return '<span class="steps-bar__step ' + className + '">' + "Step " + (index + 1) + "</span>";
+          },
+        },
+      })
+
+      this.container = document.querySelector(this.selectors.container);
+
+      this.continuePopup = document.querySelector(this.selectors.continuePopup);
+      
+      this.swiperButtonsRow = document.querySelector(this.selectors.swiperButtonsRow);
+
+      this.nextSlidePrompt = document.querySelector(this.selectors.nextSlidePrompt);
+
+      this.addPackToCartBtn = document.querySelector(this.selectors.addPackToCartBtn);
+      
+      this.currentStep = 1;
+
+      this.currentSlide = this.container.querySelector('.swiper-slide-active')
+
+      this.selectedBucklePreview = document.querySelector(this.selectors.selectedBucklePreview)
+      
+      this.registerSlideChangeListeners();
+
+      document.addEventListener('collection:reloaded', () => {
+        this.swiper.update();
+        this.hydrateProductGridItems();
+        this.updateSuggestions();
+        this.updateFilterRoute();
+        this.disableGridItemsLinks();
+      })
+
+      this.handleBelthWidthChange();
+
+      this.addPackToCartBtn.addEventListener('click', () => this.addPackToCart());
+
+      this.nextButton = this.container.querySelector(this.selectors.nextButton);
+      this.prevButton = this.container.querySelector(this.selectors.prevButton);
+
+      this.nextButton.addEventListener('click', () => this.handleNextSlideButton());
+      this.prevButton.addEventListener('click', () => this.swiper.slidePrev());
+
+      // this.stepPagination = document.querySelectorAll(this.selectors.stepPagination);
+
+      document.addEventListener('collectionLoaded', () => {
+        this.disableGridItemsLinks();
+      })
+
+    }
+
+    disableGridItemsLinks = () => {
+      this.container.querySelectorAll('.grid-product__link').forEach(link => link.addEventListener('click', (e) => e.preventDefault()))
+    }
+
+    handleNextSlideButton = () => {
+      if(this.currentStep == 1){
+        this.swiper.slideNext();
+      }
+
+      if((this.currentStep == 2 && this.state.buckle.id != "") || (this.currentStep == 3 && this.state.strap.id != "")){
+        this.swiper.slideNext();
+      }
+      else{
+        this.nextSlidePrompt.classList.add('show');
+        setTimeout(() => {
+          this.nextSlidePrompt.classList.remove('show');
+        }, 2000);
+      }
+
+    }
+
+    updateSuggestions = () => {
+      this.container.querySelectorAll(this.selectors.gridProduct).forEach(itm => itm.classList.remove('grid-product--suggested'));
+
+      if(this.state.suggestedStrap.length > 0){
+        this.state.suggestedStrap.forEach(suggStrap => {
+          if(this.container.querySelector(`${this.selectors.gridProduct}[data-product-handle="${suggStrap}"]`)){
+            this.container.querySelector(`${this.selectors.gridProduct}[data-product-handle="${suggStrap}"]`).classList.add("grid-product--suggested")
+          }
+        })
+      }
+    }
+
+    updateFilterRoute = () => {
+      // window.location.pathname.split
+      var search = location.search.substring(1);
+      console.log(JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}'))
+      let queryParamsJSON = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+      let queryParams = Object.entries(queryParamsJSON).map(itm => { 
+        if(itm[0].includes('filter')) {
+          return itm.join('=')
+        }
+      }).join("&")
+
+      this.currentSlide.dataset.filterRoute = queryParams
+
+    }
+
+    handleBelthWidthChange = () => {
+      this.state.beltWidth = this.container.querySelector(`${this.selectors.beltWidthRadio}:checked`).value;
+      this.container.querySelectorAll(this.selectors.beltWidthRadio).forEach(radio => radio.addEventListener('change', () => {
+        this.state.beltWidth = this.container.querySelector(`${this.selectors.beltWidthRadio}:checked`).value;
+      }))
+    }
+      
+
+    addPackToCart = () => {
+      this.addPackToCartBtn.classList.add('btn--loading');
+
+      if(this.state.buckle.id != "" && this.state.strap.id != ""){
+        let productIds = [this.state.buckle.id, this.state.strap.id]
+
+        let formData = {
+        'items': productIds.map(id => {
+          return {
+          'id': parseFloat(id),
+          'quantity': 1
+          }})
+        };
+        fetch(window.Shopify.routes.root + 'cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if(window.innerWidth > 768){
+            document.dispatchEvent(new CustomEvent('ajaxProduct:added', {
+              detail: {
+                product: data.items[0],
+                addToCartBtn: this.addPackToCartBtn
+              }
+            }))
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        })
+        .finally(() => {
+          this.addPackToCartBtn.classList.remove('btn--loading');
+          this.continuePopup.classList.remove('hide');
+          this.swiperButtonsRow.classList.add('hide');
+        }); 
+      }
+    }
+
+    registerSlideChangeListeners = () => {
+      this.swiper.on('slideChangeTransitionEnd', () => { 
+        this.currentStep = parseFloat(this.container.querySelector('.swiper-slide-active').dataset.step);
+        this.currentSlide = this.container.querySelector('.swiper-slide-active');
+        this.handleSlideChange();
+
+        if(this.currentSlide == 4){
+          this.nextButton.style.display = "none"
+        }
+        else{
+          this.nextButton.style.display = "block"
+        }
+        this.container.scrollIntoView({behaviour: "smooth"})
+      }) 
+    }
+
+    updateBasePaths = () => {
+      this.swiper.slides.forEach(slide => {
+        if(slide.dataset.basePath){
+          slide.dataset.basePath = slide.dataset.basePath.replace('{width}', this.state.beltWidth)
+        }
+      })
+    }
+
+    hydrateProductGridItems = () => {
+      this.productItems = this.currentSlide.querySelectorAll(this.selectors.gridProduct);
+      this.productItems.forEach(itm => itm.addEventListener('click', () => { 
+        if(!itm.classList.contains('sold-out')){ 
+          this.productItems.forEach( _i => _i.classList.remove('active'));
+          itm.classList.add('active');
+          this.state[itm.closest('[data-collection-type]').dataset.collectionType].handle = itm.dataset.productHandle
+          this.state[itm.closest('[data-collection-type]').dataset.collectionType].id = itm.querySelector('[name="id"]').selectedOptions[0].value
+          this.state[itm.closest('[data-collection-type]').dataset.collectionType].title = itm.querySelector('.grid-product__title').innerText;
+          this.state[itm.closest('[data-collection-type]').dataset.collectionType].image = itm.querySelector('.image-wrap').cloneNode(1);
+          // this.state[itm.closest('[data-collection-type]').dataset.collectionType].variant = itm.querySelector('[name="id"]').selectedOptions[0].dataset.title;
+
+          if(JSON.parse(itm.querySelector('#suggested-straps').innerText) != null){
+            this.state.suggestedStrap = JSON.parse(itm.querySelector('#suggested-straps').innerText).map(itm => { return itm.handle})
+          }
+        }
+      }))
+    }
+
+    handleSlideChange = () => {
+      
+      if(this.currentStep == 1){
+        this.selectedBucklePreview.innerHTML = ""
+      }
+
+      if(this.currentStep == 2){
+        document.querySelector(this.selectors.strapCollectionPlaceholder).innerHTML = "";
+        this.updateBasePaths();
+        let filterRoute = this.container.querySelector(`[data-base-path="/collections/${this.state.beltWidth}-buckles"]`).dataset.filterRoute;
+        this.fetchAndRenderCollection(`${this.state.beltWidth}-buckles`, filterRoute, this.selectors.buckleCollectionPlaceholder);
+        
+        this.selectedBucklePreview.innerHTML = ""
+      }
+
+      if(this.currentStep == 3){  
+        document.querySelector(this.selectors.buckleCollectionPlaceholder).innerHTML = "";
+        this.updateBasePaths();
+
+        this.selectedBucklePreview.innerHTML = this.state.buckle.image.innerHTML + `<small> ${this.state.buckle.title} </small>`
+        let filterRoute = this.container.querySelector(`[data-base-path="/collections/${this.state.beltWidth}-straps"]`).dataset.filterRoute;
+        this.fetchAndRenderCollection(`${this.state.beltWidth}-straps`, filterRoute, this.selectors.strapCollectionPlaceholder)
+      }
+
+      if(this.currentStep == 4){
+        if(this.state.strap.handle != ""){
+          this.fetchSelectedProducts();
+        }
+        
+        this.selectedBucklePreview.innerHTML = ""
+      }
+
+      this.container.querySelectorAll(this.selectors.stepbarStep).forEach(itm => itm.classList.remove('step--active'));
+      this.container.querySelector(`${this.selectors.stepbarStep}[data-index="${this.currentStep}"`).classList.add('step--active');
+    }
+
+
+    getLazyImage = (image) => {
+      return `
+        <div class="image-wrap" style="height: 0;padding-bottom: ${100/image.aspect_ratio}%;">
+          <img class="grid-product__image lazyload"
+            data-src="${theme.Images.lazyloadImagePath(image.src)}"
+            src=${image.src}
+            role="presentation"
+            data-widths="[180, 360, 540, 720, 900]"
+            data-aspectratio="${image.aspect_ratio}"
+            data-sizes="auto">
+        </div>`
+    }
+
+    renderProductMarkup = (product, placeholder) => {
+
+      const completeBeltPlacholder = this.container.querySelector(this.selectors.completeProduct);
+
+      completeBeltPlacholder.querySelector(placeholder.image).innerHTML = this.getLazyImage(product.media[0]) 
+      if(product.media[1]){
+        completeBeltPlacholder.querySelector(placeholder.secondaryImage).innerHTML = this.getLazyImage(product.media[1])
+      }
+      completeBeltPlacholder.querySelector(placeholder.title).innerHTML = product.title
+      completeBeltPlacholder.querySelector(placeholder.description).innerHTML += product.description
+      
+      let variantTitle = ""
+      try{ variantTitle = product.variants.filter( variant => variant.id == parseFloat(this.state.buckle.id))[0].title; }
+      catch(err){ console.log(err) }
+
+      try{ variantTitle = product.variants.filter( variant => variant.id == parseFloat(this.state.strap.id))[0].title; }
+      catch(err){ console.log(err); }
+
+      if(variantTitle != "Default Title" ){
+        completeBeltPlacholder.querySelector(placeholder.variantName).innerHTML = variantTitle
+      }
+    }
+
+    fetchSelectedProducts = async () => { 
+      
+      var buckleProductPlaceholder = {
+        image: "[data-buckle-image-placeholder]",  
+        secondaryImage: "[data-buckle-image-2-placeholder]",
+        title: "[data-buckle-title-placeholder]",
+        variantName: "[data-buckle-variant-placeholder]",
+        description: "[data-product-descriptions-placeholder]"
+
+      }
+      
+      var strapProductPlaceholder = {
+        image: "[data-strap-image-placeholder]",  
+        secondaryImage: "[data-strap-image-2-placeholder]",
+        title: "[data-strap-title-placeholder]",
+        variantName: "[data-strap-variant-placeholder]",
+        description: "[data-product-descriptions-placeholder]"
+      }
+
+      let totalPricePlaceholder = this.container.querySelector("[data-total-price-placeholder]");
+      let productHandles = [this.state.buckle.handle, this.state.strap.handle]
+
+      const getProducts = async () => {
+        const urls = productHandles.map(async (handle)=>{
+          try {
+            const res = await fetch(`/products/${handle}.js`)
+            return await res.json()
+          }
+          catch(err){
+            return {}
+          }
+        })
+        const result = await Promise.all([...urls])
+        return result
+      }
+
+
+      let _this  = this; 
+
+      (async function(){ 
+        let products = await getProducts()
+        _this.renderProductMarkup(products[0], buckleProductPlaceholder)
+        _this.renderProductMarkup(products[1], strapProductPlaceholder)
+
+        let selVar1 = products[0].variants.filter(variant => variant.id == parseFloat(_this.state.buckle.id))[0]
+        let selVar2 = products[1].variants.filter(variant => variant.id == parseFloat(_this.state.strap.id))[0]
+        
+        let totalPrice = theme.Currency.formatMoney(selVar1.price + selVar2.price);
+        totalPricePlaceholder.innerHTML = totalPrice
+
+        _this.swiper.update();
+
+      })()
+  
+    }
+
+    fetchAndRenderCollection = async (collectionHandle, filterRoute, placeholder) => {
+
+      const cPlaceholder = document.querySelector(placeholder);
+      cPlaceholder.innerHTML = '';
+  
+      console.log(window.Shopify.routes.root + `collections/${collectionHandle}?section_id=main-collection-secondary&${filterRoute}`)
+      fetch(window.Shopify.routes.root + `collections/${collectionHandle}?section_id=main-collection-secondary&${filterRoute}`)
+        .then(res => res.text()) 
+        .then(data => {
+          cPlaceholder.innerHTML = data; 
+          this.swiper.update();
+          const detail = {
+            collection: collectionHandle,
+            placeholder, 
+          }
+    
+          document.dispatchEvent(new CustomEvent('collectionLoaded', {detail}));
+          this.updateSuggestions();
+          this.hydrateProductGridItems();
+        })
+    } 
+  }
+
+  const makeYourOwnBelt = new MakeYourOwnBelt();
+
+</script>
+
+{% schema %}
+{
+  "name": "Make Your Own Belt",
+  "settings": [
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#fded35"
+    },
+    {
+      "type": "color",
+      "id": "font_color",
+      "label": "Font Color", 
+      "default": "#212121"
+    }
+  ]
+}
+{% endschema %}
