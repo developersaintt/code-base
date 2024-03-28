@@ -1,0 +1,48 @@
+<custom-swiper
+  class=""
+  id="Swiper-{{section.id}}"
+>
+  <div class="swiper-button-prev">{% render 'icon-swiper-arrow-left' %}</div>
+  <div class="swiper-button-next">{% render 'icon-swiper-arrow-right' %}</div>
+
+  <div class="swiper">
+    <div
+      class="swiper-wrapper"
+      id="Slider-{{ section.id }}"
+      role="list"
+    >
+      {%- for block in section.blocks -%}
+        <div
+          class="swiper-slide "
+          {{ block.shopify_attributes }}
+        ></div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <script type="application/json" id="SwiperOptions-{{section.id}}">
+    {
+      "slidesPerView": {{section.settings.columns_desktop}},
+      "loop": true,
+      "spaceBetween": 50,
+      "navigation": {
+        "nextEl": "#Swiper-{{ section.id }} .swiper-button-next",
+        "prevEl": "#Swiper-{{ section.id }} .swiper-button-prev"
+      },
+      "breakpoints": {
+        "320": {
+          "slidesPerView": {{section.settings.columns_mobile}},
+          "spaceBetween": 10
+        },
+        "750": {
+          "slidesPerView": {{section.settings.columns_mobile}},
+          "spaceBetween": 20
+        },
+        "990": {
+          "slidesPerView": {{section.settings.columns_desktop}},
+          "spaceBetween": 50
+        }
+      }
+    }
+  </script>
+</custom-swiper>

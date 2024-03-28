@@ -1,0 +1,45 @@
+custom-swiper {
+  display: block;
+  position: relative;
+  --swiper-navigation-color: black;
+}
+
+custom-swiper ul.swiper-wrapper {
+  padding-left: 0;
+}
+
+custom-swiper .swiper-button-prev:after,
+custom-swiper .swiper-button-next:after,
+custom-swiper .swiper-rtl .swiper-button-prev:after {
+  content: "";
+  background: transparent;
+  width: 35px;
+  position: absolute;
+  height: 35px;
+  border: 2px solid var(--swiper-navigation-color);
+  border-radius: 100px;
+  z-index: -1;
+}
+
+custom-swiper .swiper-button-next svg,
+custom-swiper .swiper-button-prev svg {
+  width: 17px;
+}
+
+custom-swiper .swiper-slide {
+  transition: all 0.3s ease;
+}
+
+custom-swiper .swiper-scrollbar-drag {
+  display: block !important;
+  --swiper-scrollbar-drag-bg-color: rgb(var(--color-foreground));
+}
+
+custom-swiper .swiper-scrollbar.swiper-scrollbar-horizontal {
+  --swiper-scrollbar-sides-offset: 30px;
+  --swiper-scrollbar-size: 8px;
+}
+
+custom-swiper .swiper-slide {
+  max-width: none !important;
+}
