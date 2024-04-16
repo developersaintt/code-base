@@ -1,0 +1,74 @@
+<style>
+  .sticky-form.stick {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    z-index: 20;
+    height: 90px;
+  }
+</style>
+
+<script>
+  let selectors = {
+    elToObserve: '.product-form',
+    stickyEl: '.sticky-form',
+    fixHeightEl: '.product-form',
+    stickyClass: 'stick',
+  };
+
+  window.addEventListener('DOMContentLoaded', (e) => {
+    document.querySelector(selectors.fixHeightEl).style.height = `${
+      document.querySelector(selectors.fixHeightEl).scrollHeight
+    }px`;
+  });
+  if (window.innerWidth <= 768) {
+    const elementToObserve = document.querySelector(selectors.elToObserve);
+    const elementToStick = document.querySelector(selectors.stickyEl);
+    let crossed_once = false;
+    const makeFormSticky = function (entries) {
+      const [entry] = entries;
+      console.log(entry);
+      if (entry.isIntersecting) {
+        elementToStick.classList.remove(selectors.stickyClass);
+        document.querySelector(selectors.elToObserve).style.height =
+          document.querySelector(selectors.elToObserve).scrollHeight + 'px';
+      } else {
+        elementToStick.classList.add(selectors.stickyClass);
+      }
+    };
+    const stickyFormObserver = new IntersectionObserver(makeFormSticky, {
+      root: null,
+      threshold: 0,
+    });
+    stickyFormObserver.observe(elementToObserve);
+  }
+
+  // Select the node that will be observed for mutations
+  const targetNode = document.querySelector(selectors.elToObserve);
+
+  // Options for the observer (which mutations to observe)
+  const config = { attributes: true, childList: true, subtree: true };
+
+  // Callback function to execute when mutations are observed
+  const callback = function (mutationsList, observer) {
+    // Use traditional 'for loops' for IE 11
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        targetNode.style.height = targetNode.scrollHeight + 'px';
+        console.log(targetNode.scrollHeight + 'px');
+      }
+    }
+  };
+
+  // Create an observer instance linked to the callback function
+  const observer = new MutationObserver(callback);
+
+  // Start observing the target node for configured mutations
+  observer.observe(targetNode, config);
+</script>

@@ -1,0 +1,85 @@
+{% style %}
+  {% if section.settings.background_color != blank %}
+    #shopify-section-{{section.id}} {
+      background-color: {{ section.settings.background_color }};
+    }
+  {% endif %}
+
+  #shopify-section-{{section.id}} {
+    position: sticky;
+    top: 109px;
+    z-index: 11
+  }
+
+  @media screen and (max-width: 640px) {
+    #shopify-section-{{section.id}} {
+      top: 103px;
+    }
+  }
+  #shopify-section-{{section.id}} > .Section--spacingNormal{
+    padding: 10px;
+  }
+{% endstyle %}
+
+<section class="Section Section--spacingNormal Product__StickyBarWrapper">
+  <div class="Product__StickyBar">
+    {% for block in section.blocks %}
+      <div class="Product__StickyBarItem">
+        <button
+          data-section-id="{{ block.settings.link_url }}"
+          data-section-position="{{block.settings.section_position}}"
+          class="Product__StickyBarLink"
+        >
+          {{- block.settings.title -}}
+        </button>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product Sticky Bar",
+  "class": "shopify-section--bordered",
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "number",
+          "id": "section_position",
+          "label": "Section Position",
+          "default": 1,
+          "placeholder": "Section Position on the page"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color"
+    }
+  ],
+  "templates": ["product"],
+  "presets": [
+    {
+      "category": "Text",
+      "name": "Product Sticky Bar",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

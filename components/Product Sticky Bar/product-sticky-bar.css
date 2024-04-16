@@ -1,0 +1,38 @@
+.Product__StickyBarLink {
+  opacity: 0.5;
+}
+.Product__StickyBarLink.is-active {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: bold;
+}
+
+@media (max-width: 640px) {
+  .Product__StickyBar {
+    overflow: auto;
+  }
+
+  .Product__StickyBarLink {
+    font-size: 14px;
+  }
+  .Product__StickyBarItem {
+    white-space: nowrap;
+    margin: 0 0.5rem;
+    z-index: 1;
+  }
+
+  .Product__StickyBarWrapper {
+    position: relative;
+  }
+  .Product__StickyBarWrapper::after {
+    position: absolute;
+    top: 0;
+    width: 100px;
+    height: 100%;
+    left: auto;
+    right: 0;
+    content: "";
+    background: linear-gradient(to right, #fff0, #ffffff);
+  }
+}
