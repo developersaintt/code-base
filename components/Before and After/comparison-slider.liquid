@@ -1,0 +1,139 @@
+
+
+{{ 'comparison-slider.css' | asset_url | stylesheet_tag }}
+
+<div class="color-{{ section.settings.color_scheme }} content-for-grouping animate-section animate--hidden {{ section.settings.visibility }}">
+  
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="content-and-comparison-slider section-group__container__child-grid ">
+      
+      <comparison-slider class="comparison-slider animate-item animate-item--child index-{{ content_index }}">
+        {% unless section.settings.before_label == blank %}
+          <div class="comparison-slider__before-text">
+            <h3 style="background-color:{{ section.settings.label_bg_color }};color:{{ section.settings.label_color }}" >{{ section.settings.before_label }}</h3>
+          </div>
+        {% endunless %}
+        {% unless section.settings.after_label == blank %}
+          <div class="comparison-slider__after-text">
+            <h3 style="background-color:{{ section.settings.label_bg_color }};color:{{ section.settings.label_color }}" >{{ section.settings.after_label }}</h3>
+          </div>
+        {% endunless %}
+        <div class="comparison-slider__overlay{% if section.settings.before_image != blank %} color-{{ section.settings.color_scheme }}{% endif %}">
+          {%- if section.settings.before_image != blank -%}
+            {{ section.settings.before_image | image_url: width: 1500 | image_tag: loading: 'lazy', width: 950 }}
+          {%- endif -%}
+        </div>
+        <div class="comparison-slider__line comparison-slider__line--{{ section.settings.arrows_style }} color-{{ section.settings.line_color }}">
+          <div class="comparison-slider__arrow-left">&nbsp</div>
+          <div class="comparison-slider__arrow-right">&nbsp</div>
+        </div>
+        <input type="range" class="comparison-slider__input" min="0" max="100" value="50">
+        <div class="comparison-slider__underlay color-{{ section.settings.color_scheme }}">
+          {%- if section.settings.after_image != blank -%}
+            {{ section.settings.after_image | image_url: width: 1500 | image_tag: loading: 'lazy', width: 950 }}
+          {%- else -%}
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+      </comparison-slider>
+    </div>
+  </div>
+</div>
+
+<script src="{{'comparison-slider.js' |  asset_url}}" defer></script>
+
+{% schema %}
+{
+  "name": "Before & After slider",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Slider"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "Before label",
+      "default": "Before"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "After label",
+      "default": "After"
+    },
+    {
+      "type": "color",
+      "id": "label_bg_color",
+      "label": "Label BG Color"
+    },
+    {
+      "type": "color",
+      "id": "label_color",
+      "label": "Label Text Color"
+    },
+    {
+      "type": "select",
+      "id": "line_color",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "Accent 1"
+        },
+        {
+          "value": "accent-2",
+          "label": "Accent 2"
+        },
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        },
+        {
+          "value": "inverse",
+          "label": "Inverse"
+        }
+        ],
+      "default": "background-1",
+      "label": "Separator line color"
+    },
+    {
+      "type": "select",
+      "id": "arrows_style",
+      "options": [
+        {
+          "value": "classic",
+          "label": "Classic"
+        },
+        {
+          "value": "circle",
+          "label": "Circle around"
+        }
+      ],
+      "default": "circle",
+      "label": "Arrows style"
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Before image"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "After image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Before & After slider"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
