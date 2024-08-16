@@ -1,0 +1,458 @@
+{% for block in section.blocks %}
+  {% case block.type %}
+    {% when 'progress_bar' %}
+      {% render 'cart-progress-bar', block: block %}
+    {% when 'checkpoints_bar' %}
+      {% render 'cart-checkpoints-bar', block: block %}
+    {% when 'countdown_timer' %}
+      {% capture timer %} <countdown-timer data-duration="{{ block.settings.timer_duration }}"></countdown-timer> {% endcapture %}
+      <div
+        class="cart-timer color-{{ block.settings.color_scheme }}"
+        style="--font-size:{{ block.settings.font_size }}rem;--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;"
+        {{ block.shopify_attributes }}
+      >
+        {{ block.settings.timer_text | replace: '[timer]', timer }}
+      </div>
+    {% when 'collection' %}
+      {% render 'cart-drawer__collection', card_collection: block.settings.cart_drawer_collection, columns: 1 %}
+  {% endcase %}
+{% endfor %}
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "limit": 1,
+  "blocks": [
+    {
+      "type": "progress_bar",
+      "name": "Progress bar",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Use the progress bar for shipping or other cart promotions. The progress bar will show a success message once the cart subtotal reaches the set goal. Make sure to set up an [automatic discount](https://help.shopify.com/en/manual/discounts/automatic-discounts)."
+        },
+        {
+          "type": "number",
+          "id": "goal",
+          "label": "Progress bar goal",
+          "info": "Required cart sub-total for the promotion.",
+          "default": 50
+        },
+        {
+          "type": "text",
+          "id": "progress_message",
+          "label": "Progress message",
+          "default": "Spend [amount] more to get FREE shipping!",
+          "info": "Use '[amount]' to display the amount needed to reach the goal."
+        },
+        {
+          "type": "text",
+          "id": "success_message",
+          "label": "Success message",
+          "default": "Congrats! You get FREE shipping!"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "default": "local_shipping",
+          "label": "Icon",
+          "info": "[View all available icons](https://fonts.google.com/icons?icon.set=Material+Symbols&icon.platform=web)."
+        },
+        {
+          "type": "checkbox",
+          "id": "icon_filled",
+          "default": false,
+          "label": "Filled icon"
+        },
+        {
+          "type": "select",
+          "id": "accent_color",
+          "label": "Accent color",
+          "options": [
+            {
+              "value": "accent-1",
+              "label": "Accent 1"
+            },
+            {
+              "value": "accent-2",
+              "label": "Accent 2"
+            },
+            {
+              "value": "outline-button",
+              "label": "Outline button"
+            },
+            {
+              "value": "text",
+              "label": "Text"
+            }
+          ],
+          "default": "accent-1"
+        },
+        {
+          "type": "header",
+          "content": "Block margin"
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "min": 0,
+          "max": 45,
+          "step": 3,
+          "unit": "px",
+          "label": "Top margin",
+          "default": 15
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "min": 0,
+          "max": 45,
+          "step": 3,
+          "unit": "px",
+          "label": "Bottom margin",
+          "default": 15
+        }
+      ]
+    },
+    {
+      "type": "checkpoints_bar",
+      "name": "Checkpoints bar",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Similar to the Progress bar block, but used to display multiple promotions. Make sure to set up [automatic discounts](https://help.shopify.com/en/manual/discounts/automatic-discounts) and/or gift blocks."
+        },
+        {
+          "type": "text",
+          "id": "progress_message",
+          "label": "Progress message",
+          "default": "You're [amount] away from [next_goal_lowercase]!",
+          "info": "Use [amount] to display amount needed to reach the next goal and [next_goal] to display \"Progress message text\" of the next goal."
+        },
+        {
+          "type": "text",
+          "id": "success_message",
+          "label": "Success message",
+          "default": "Congrats! You've unlocked all prizes!🎉",
+          "info": "Displayed after all promotions are unlocked."
+        },
+        {
+          "type": "range",
+          "id": "labels_mobile_text_size",
+          "min": 6,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "default": 10,
+          "label": "Mobile labels text size",
+          "info": "Mobile font size of goal names under icons"
+        },
+        {
+          "type": "range",
+          "id": "labels_desktop_text_size",
+          "min": 6,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "default": 12,
+          "label": "Desktop labels text size",
+          "info": "Desktop font size of goal names under icons"
+        },
+        {
+          "type": "select",
+          "id": "accent_color",
+          "label": "Accent color",
+          "options": [
+            {
+              "value": "accent-1",
+              "label": "Accent 1"
+            },
+            {
+              "value": "accent-2",
+              "label": "Accent 2"
+            },
+            {
+              "value": "outline-button",
+              "label": "Outline button"
+            },
+            {
+              "value": "text",
+              "label": "Text"
+            }
+          ],
+          "default": "accent-1"
+        },
+        {
+          "type": "header",
+          "content": "Goal #1"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_goal_1",
+          "default": true,
+          "label": "Enable goal #1"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "goal_1_label",
+          "label": "Goal #1 Label",
+          "default": "Free Shipping",
+          "info": "Displayed under the icon. Use <br> to go into a new line."
+        },
+        {
+          "type": "text",
+          "id": "goal_1_text",
+          "label": "Goal #1 Progress message text",
+          "default": "FREE shipping",
+          "info": "Replaces [next_goal] in the progress message."
+        },
+        {
+          "type": "number",
+          "id": "goal_1_amount",
+          "label": "Goal #1 Amount",
+          "info": "Required cart sub-total for the promotion.",
+          "default": 30
+        },
+        {
+          "type": "text",
+          "id": "goal_1_icon",
+          "default": "local_shipping",
+          "label": "Goal #1 Icon",
+          "info": "[View all available icons](https://fonts.google.com/icons?icon.set=Material+Symbols&icon.platform=web)."
+        },
+        {
+          "type": "product",
+          "id": "goal_1_product",
+          "label": "Goal 1 Products",
+          "info": "Select the product that will be added to the cart as a gift when the goal is reached."
+        },
+        {
+          "type": "checkbox",
+          "id": "goal_1_icon_filled",
+          "default": false,
+          "label": "Goal #1 Filled icon"
+        },
+        {
+          "type": "header",
+          "content": "Goal #2"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_goal_2",
+          "default": true,
+          "label": "Enable goal #2"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "goal_2_label",
+          "label": "Goal #2 Label",
+          "default": "20% OFF",
+          "info": "Displayed under the icon. Use <br> to go into a new line."
+        },
+        {
+          "type": "text",
+          "id": "goal_2_text",
+          "label": "Goal #2 Progress message text",
+          "default": "a 20% discount",
+          "info": "Replaces [next_goal] in the progress message."
+        },
+        {
+          "type": "number",
+          "id": "goal_2_amount",
+          "label": "Goal #2 Amount",
+          "info": "Required cart sub-total for the promotion.",
+          "default": 50
+        },
+        {
+          "type": "text",
+          "id": "goal_2_icon",
+          "default": "sell",
+          "label": "Goal #2 Icon",
+          "info": "[View all available icons](https://fonts.google.com/icons?icon.set=Material+Symbols&icon.platform=web)."
+        },
+        {
+          "type": "product",
+          "id": "goal_2_product",
+          "label": "Goal 2 Products",
+          "info": "Select the product that will be added to the cart as a gift when the goal is reached."
+        },
+        {
+          "type": "checkbox",
+          "id": "goal_2_icon_filled",
+          "default": false,
+          "label": "Goal #2 Filled icon"
+        },
+        {
+          "type": "header",
+          "content": "Goal #3"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_goal_3",
+          "default": false,
+          "label": "Enable goal #3"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "goal_3_label",
+          "label": "Goal #3 Label",
+          "default": "Free Gift",
+          "info": "Displayed under the icon. Use <br> to go into a new line."
+        },
+        {
+          "type": "text",
+          "id": "goal_3_text",
+          "label": "Goal #3 Progress message text",
+          "default": "a FREE GIFT",
+          "info": "Replaces [next_goal] in the progress message."
+        },
+        {
+          "type": "number",
+          "id": "goal_3_amount",
+          "label": "Goal #3 Amount",
+          "info": "Required cart sub-total for the promotion.",
+          "default": 100
+        },
+        {
+          "type": "text",
+          "id": "goal_3_icon",
+          "label": "Goal #3 Icon",
+          "default": "redeem",
+          "info": "[View all available icons](https://fonts.google.com/icons?icon.set=Material+Symbols&icon.platform=web)."
+        },
+        {
+          "type": "product",
+          "id": "goal_3_product",
+          "label": "Goal 3 Products",
+          "info": "Select the product that will be added to the cart as a gift when the goal is reached."
+        },
+        {
+          "type": "checkbox",
+          "id": "goal_3_icon_filled",
+          "default": false,
+          "label": "Goal #3 Filled icon"
+        },
+        {
+          "type": "header",
+          "content": "Block margin"
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "min": 0,
+          "max": 45,
+          "step": 3,
+          "unit": "px",
+          "label": "Top margin",
+          "default": 15
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "min": 0,
+          "max": 45,
+          "step": 3,
+          "unit": "px",
+          "label": "Bottom margin",
+          "default": 15
+        }
+      ]
+    },
+    {
+      "type": "countdown_timer",
+      "name": "Countdown timer",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "timer_text",
+          "label": "Text",
+          "default": "<strong>Cart reserved for [timer] more minutes!</strong>",
+          "info": "Use [timer] to display the timer."
+        },
+        {
+          "type": "number",
+          "id": "timer_duration",
+          "label": "Timer duration (in seconds)",
+          "default": 300
+        },
+        {
+          "type": "select",
+          "id": "font_size",
+          "options": [
+            { "value": "1", "label": "Extra small" },
+            { "value": "1.2", "label": "Small" },
+            { "value": "1.4", "label": "Medium" },
+            { "value": "1.6", "label": "Large" },
+            { "value": "1.8", "label": "Extra large" }
+          ],
+          "default": "1.4",
+          "label": "Text size"
+        },
+        {
+          "type": "select",
+          "id": "color_scheme",
+          "options": [
+            {
+              "value": "accent-1",
+              "label": "t:sections.all.colors.accent_1.label"
+            },
+            {
+              "value": "accent-2",
+              "label": "t:sections.all.colors.accent_2.label"
+            },
+            {
+              "value": "background-1",
+              "label": "t:sections.all.colors.background_1.label"
+            },
+            {
+              "value": "background-2",
+              "label": "t:sections.all.colors.background_2.label"
+            },
+            { "value": "inverse", "label": "t:sections.all.colors.inverse.label" }
+          ],
+          "default": "inverse",
+          "label": "Color scheme"
+        },
+        {
+          "type": "header",
+          "content": "Block margin"
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "min": 0,
+          "max": 45,
+          "step": 3,
+          "unit": "px",
+          "label": "Top margin",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "min": 0,
+          "max": 45,
+          "step": 3,
+          "unit": "px",
+          "label": "Bottom margin",
+          "default": 15
+        }
+      ]
+    },
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "cart_drawer_collection",
+          "label": "Cart Drawer Collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

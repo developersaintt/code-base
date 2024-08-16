@@ -1,0 +1,107 @@
+.cart-timer {
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+  padding: 1em 1.5rem;
+  text-align: center;
+  line-height: 1.3;
+  color: rgb(var(--color-foreground));
+  font-size: var(--font-size);
+}
+.cart-progress {
+  padding-bottom: 1.5rem;
+}
+.cart-progress__bar {
+  height: 0.9rem;
+  background: rgba(var(--color-foreground), 0.15);
+  position: relative;
+  border-radius: 5rem;
+  text-align: center;
+  margin: 0 0.5rem;
+}
+.cart-progress__bar__progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 5rem;
+  background: rgb(var(--accent-color));
+  background-image: linear-gradient(
+    315deg,
+    rgba(255, 255, 255, 0.4) 25%,
+    transparent 0,
+    transparent 50%,
+    rgba(255, 255, 255, 0.4) 0,
+    rgba(255, 255, 255, 0.4) 75%,
+    transparent 0,
+    transparent
+  );
+  background-size: 1rem 1rem;
+  animation: slideBar 4s linear infinite;
+}
+.cart-progress__bar__badge {
+  font-size: 3rem;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(50%, -50%);
+  background: rgb(var(--color-background));
+  border-radius: 50%;
+  border: solid 0.2rem rgb(var(--accent-color));
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+.cart-progress__bar__badge .material-symbols-outlined {
+  color: rgb(var(--accent-color));
+  font-size: 0.6em;
+}
+.cart-progress__text {
+  margin: 0 0 1em;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+@keyframes slideBar {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: 10rem;
+  }
+}
+.cart-checkpoints {
+  padding-bottom: calc(1.5rem + var(--desktop-text-size));
+}
+.cart-checkpoints .cart-progress__text {
+  margin-bottom: 0.7em;
+}
+.cart-checkpoints .cart-progress__bar {
+  margin: 0 2rem;
+  height: 0.7rem;
+}
+.cart-checkpoints .cart-progress__bar__badge {
+  font-size: 2.4rem;
+}
+.cart-checkpoints__icon {
+  right: auto;
+  left: var(--position);
+  transform: translate(-50%, -50%);
+}
+.cart-checkpoints__label {
+  line-height: 1.2;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  text-align: center;
+  white-space: nowrap;
+  display: block;
+}
+.cart-checkpoints
+  .cart-progress__bar
+  .cart-progress__bar__badge:last-of-type
+  .cart-checkpoints__label {
+  width: 6.6rem;
+  white-space: normal;
+}
