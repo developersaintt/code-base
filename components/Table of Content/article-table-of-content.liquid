@@ -1,0 +1,77 @@
+{{ 'article-table-of-content.css' | asset_url | stylesheet_tag }}
+<div class="article__table-of-content">
+  {% liquid
+    assign h2s = article.content | split: '</h2>'
+    echo '<ol>'
+
+    # h2
+    for h2 in h2s
+      echo '<ol>'
+      assign h3s = h2 | split: '</h3>'
+      for h3 in h3s
+        #
+        # h4
+        echo '<ol>'
+        assign h4s = h3 | split: '</h4>'
+        for h4 in h4s
+          assign h4_split = h4 | split: '<h4' | last
+          assign h4_split = h4_split | prepend: '<h4' | append: '</h4>' | strip_html
+          assign h4_handlize = h4_split | handleize
+          # assign list_item = '<li>' | append: h4_split | append: '</li>'
+
+          unless forloop.last
+            echo '<li>'
+            echo '<a href="#' | append: h4_handlize | append: '">'
+            echo h4_split
+            echo '</a>'
+            echo '</li>'
+            # echo list_item
+          endunless
+        endfor
+        echo '</ol>'
+
+        # h3
+        assign h3_split = h3 | split: '<h3' | last
+        assign h3_split = h3_split | prepend: '<h3' | append: '</h3>' | strip_html
+        assign h3_handlize = h3_split | handleize
+        # assign list_item = '<li>' | append: h3_split | append: '</li>'
+
+        unless forloop.last
+          echo '<li>'
+          echo '<a href="#' | append: h3_handlize | append: '">'
+          echo h3_split
+          echo '</a>'
+          echo '</li>'
+          # echo list_item
+        endunless
+      endfor
+      echo '</ol>'
+
+      assign h2_split = h2 | split: '<h2' | last
+      assign h2_split = h2_split | prepend: '<h2' | append: '</h2>' | strip_html
+      assign h2_handlize = h2_split | handleize
+      # assign list_item = '<li>' | append: h2_split | append: '</li>'
+      # echo list_item
+
+      unless forloop.last
+        echo '<li>'
+        echo '<a href="#' | append: h2_handlize | append: '">'
+        echo h2_split
+        echo '</a>'
+        echo '</li>'
+      endunless
+    endfor
+    echo '</ol>'
+  %}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var article = document.querySelector('.article__main-content');
+    var headings = article.querySelectorAll('h2, h3, h4');
+    headings.forEach(function (heading) {
+      const id = heading.textContent.replace(/\s+/g, '-').replace(':', '').toLowerCase();
+      heading.setAttribute('id', id);
+    });
+  });
+</script>
