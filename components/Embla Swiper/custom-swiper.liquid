@@ -1,0 +1,66 @@
+{%- liquid
+  assign columns_desktop = section.settings.columns_desktop | times: 1.00
+  assign columns_mobile = section.settings.columns_mobile | times: 1.00
+-%}
+
+{% style %}
+  custom-swiper{
+    position: relative;
+  }
+  #Swiper-{{section.id}} .embla__container {
+    margin-left: calc(var(--grid-desktop-horizontal-spacing) * -1);
+  }
+  #Swiper-{{section.id}} .embla__slide {
+    padding-left: var(--grid-desktop-horizontal-spacing);
+    flex: 0 0 {{1 | divided_by: columns_desktop | times: 100.00 | round: 2 }}%;
+  }
+  @media screen and (max-width: 750px) {
+    #Swiper-{{section.id}} .embla__container {
+      margin-left: calc(var(--grid-mobile-horizontal-spacing) * -1);
+    }
+    #Swiper-{{section.id}} .embla__slide {
+      padding-left: var(--grid-mobile-horizontal-spacing);
+      flex: 0 0 {{1 | divided_by: columns_mobile | times: 100.00 | round: 2 }}%;
+    }
+  }
+{% endstyle %}
+
+<custom-swiper
+  class=" page-width"
+  id="Swiper-{{section.id}}"
+>
+  <div class="embla">
+    <div class="embla__viewport">
+      <div class="embla__container ">
+        <div class="embla__slide "></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slider-buttons large-up-hide">
+    <button
+      type="button"
+      class="slider-button slider-button--prev"
+      data-embla-prev
+      aria-label="{{ 'general.slider.next_slide' | t }}"
+    >
+      <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+    </button>
+
+    <button
+      type="button"
+      data-embla-next
+      class="slider-button slider-button--next"
+      aria-label="{{ 'general.slider.previous_slide' | t }}"
+    >
+      <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+    </button>
+  </div>
+
+  <script type="application/json" id="SwiperOptions-{{section.id}}">
+    {
+      "loop": false,
+      "align": "start"
+    }
+  </script>
+</custom-swiper>
