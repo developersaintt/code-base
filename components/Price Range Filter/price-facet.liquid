@@ -1,0 +1,71 @@
+<div style="display: flex; gap: 10px">
+  <span class="field-currency hidden">{{ cart.currency.symbol }}</span>
+
+  <div class="field">
+    <input
+      class="field__input field__input--min"
+      name="{{ filter.min_value.param_name }}"
+      id="{{ id_prefix }}{{ filter.label | escape }}-GTE"
+      {%- if filter.min_value.value -%}
+        value="{{ filter.min_value.value | money_without_trailing_zeros }}"
+      {%- endif -%}
+      type="text"
+      inputmode="decimal"
+      {%- if filter.min_value.value -%}
+        placeholder="{{ filter.min_value.value | money_without_currency }}"
+      {%- else -%}
+        placeholder="0"
+      {%- endif -%}
+
+      min="0"
+      max="{{ filter.range_max | money_without_currency | remove: ' ' | remove: "'" | remove: ',' | ceil }}"
+
+      data-pattern="\d| |,|\."
+      data-min="0"
+      data-max="{{ filter.range_max | money_without_trailing_zeros }}"
+    >
+    <label class="field__label" for="{{ id_prefix }}{{ filter.label | escape }}-GTE">
+      {{- 'products.facets.from' | t -}}
+    </label>
+  </div>
+
+  {%- if filter_type != 'vertical' -%}
+    <span class="field-currency hidden">{{ cart.currency.symbol }}</span>
+  {%- endif -%}
+
+  <div class="field">
+    <input
+      class="field__input field__input--max"
+      name="{{ filter.max_value.param_name }}"
+      id="{{ id_prefix }}{{ filter.label | escape }}-LTE"
+      {%- if filter.max_value.value -%}
+        value="{{ filter.max_value.value | money_without_trailing_zeros }}"
+      {%- endif -%}
+
+      type="text"
+      inputmode="decimal"
+
+      {%- if filter.max_value.value -%}
+        placeholder="{{ filter.max_value.value | money_without_currency }}"
+      {%- else -%}
+        placeholder="{{ filter.range_max | money_without_currency}}"
+      {%- endif -%}
+
+      data-pattern="\d| |,|\."
+      min="0"
+      max="{{ filter.range_max | money_without_currency | remove: ' ' | remove: "'" | remove: ',' | ceil }}"
+      data-min="0"
+      data-max="{{ filter.range_max | money_without_trailing_zeros }}"
+    >
+    <label class="field__label" for="{{ id_prefix }}{{ filter.label | escape }}-LTE">
+      {{- 'products.facets.to' | t -}}
+    </label>
+  </div>
+</div>
+
+<div class="cc-price-range__bar">
+  <div class="cc-price-range__bar-inactive"></div>
+  <div class="cc-price-range__bar-active"></div>
+  <div id="CCPriceRangeSliderMin" class="cc-price-range__control cc-price-range__control--min" aria-label="Min"></div>
+  <div id="CCPriceRangeSliderMax" class="cc-price-range__control cc-price-range__control--max" aria-label="Max"></div>
+</div>
