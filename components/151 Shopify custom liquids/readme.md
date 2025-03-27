@@ -4,6 +4,10 @@
 
 [![Hurryup](./100.Hurryup/image.png)](./100.Hurryup)
 
+101
+
+102
+
 [![In Stock](./103.InStock/image.png)](./103.InStock)
 
 [![Instagram Viral](./104.InstagramViral/image.png)](./104.InstagramViral)
@@ -16,11 +20,15 @@
 
 [![Limitedstock2](./108.Limitedstock2/image.png)](./108.Limitedstock2)
 
+109
+
 [![90_ofourcustomersloveourproducts](./11.90_ofourcustomersloveourproducts/image.png)](./11.90_ofourcustomersloveourproducts)
 
 [![Lovedby10000](./110.Lovedby10000/image.png)](./110.Lovedby10000)
 
 [![Loved Product](./111.LovedProduct/image.png)](./111.LovedProduct)
+
+112
 
 [![Low Stock2](./113.LowStock2/image.png)](./113.LowStock2)
 
@@ -57,6 +65,8 @@
 [![Risk Free](./128.RiskFree/image.png)](./128.RiskFree)
 
 [![Infinite Announcement Bar](./13.InfiniteAnnouncementBar/image.png)](./13.InfiniteAnnouncementBar)
+
+130
 
 [![Special Sale Orange](./132.SpecialSaleOrange/image.png)](./132.SpecialSaleOrange)
 
@@ -212,10 +222,12 @@
 
 [![Tabswithimages](./65.Tabswithimages/image.png)](./65.Tabswithimages)
 
-66
 [![2000+peoplevoted](./66.2000+peoplevoted/image.png)](./66.2000+peoplevoted)
 
-[![Watch the video](./66.2000+peoplevoted/image.png)](https://raw.githubusercontent.com/developersaintt/code-base/main/components/151%20Shopify%20custom%20liquids/67.AnnouncementBar/video.mp4)
+
+67
+68
+69
 
 
 [![Review Slidersv2](./7.ReviewSlidersv2/image.png)](./7.ReviewSlidersv2)
@@ -226,9 +238,13 @@
 
 [![Christmas Day](./72.ChristmasDay/image.png)](./72.ChristmasDay)
 
+73
+
 [![Comparisontable](./74.Comparisontable/image.png)](./74.Comparisontable)
 
 [![Comparison Table2](./75.ComparisonTable2/image.png)](./75.ComparisonTable2)
+
+76
 
 [![Copyablediscountbar2](./77.Copyablediscountbar2/image.png)](./77.Copyablediscountbar2)
 
@@ -239,6 +255,10 @@
 [![3CTApills(abovetitle)](./8.3CTApills(abovetitle)/image.png)](./8.3CTApills(abovetitle))
 
 [![Customer Review](./80.CustomerReview/image.png)](./80.CustomerReview)
+
+81
+
+82
 
 [![Customer Review Star](./83.CustomerReviewStar/image.png)](./83.CustomerReviewStar)
 
